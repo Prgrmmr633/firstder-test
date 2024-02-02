@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Form, UploadFile, Request, Response, status, HTTPException
+from fastapi import FastAPI, Form, UploadFile, Request, Response, status
 from fastapi.templating import Jinja2Templates
 import uvicorn
 import requests
@@ -29,20 +29,11 @@ async def process(
          files={"file": image_contents},
      )
 
-    try:
-        response.raise_for_status()  # Raise an HTTPError for bad responses (4xx and 5xx)
-        data = response.json()
-        predictions = data.get("predictions", [])
-        confidence_scores = [prediction.get("confidence", 0) for prediction in predictions]
-    except requests.exceptions.HTTPError as e:
-        # Handle HTTP errors
-        raise HTTPException(status_code=response.status_code, detail=f"Autoderm API error: {e}")
-    except requests.exceptions.JSONDecodeError as e:
-        # Handle JSON decode errors
-        raise HTTPException(status_code=500, detail=f"Unable to decode response from Autoderm API as JSON: {e}")
+    data = response.json()
+    predictions = data["predictions"]
 
     return templates.TemplateResponse(
-        "prediction.html", {"request": request, "predictions": predictions, "confidence_scores": confidence_scores}
+        "prediction.html", {"request": request, "predictions": predictions}
     )
 
 if __name__ == "__main__":
