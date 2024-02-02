@@ -24,16 +24,19 @@ async def process(
 ):
     image_contents = await image.read()
     response = requests.post(
-         "https://autoderm.ai/v1/query?model=autoderm_v2_0&language=en",
+         "https://autoderm.ai/v1/query?model=autoderm_v2_2&language=en",
          headers={"Api-Key": "5675fd21-7929-2597-6c8e-69e220ede9a2"},
          files={"file": image_contents},
      )
 
     data = response.json()
-    predictions = data["predictions"]
+    predictions = data.get("predictions", [])
+
+    # Extract confidence scores from predictions
+    confidence_scores = [prediction.get("confidence", 0) for prediction in predictions]
 
     return templates.TemplateResponse(
-        "prediction.html", {"request": request, "predictions": predictions}
+        "prediction.html", {"request": request, "predictions": predictions, "confidence_scores": confidence_scores}
     )
 
 if __name__ == "__main__":
