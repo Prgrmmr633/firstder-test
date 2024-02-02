@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+	<title>{% block title %}{% endblock %} - AutoDerm</title>
+	<meta name="description" content="Dermatology AI made easy" />
+	<meta name="author" content="Ricardo Ander-Egg" />
+</head>
+
+<body>
+	<div id="content" class="flex justify-center items-center min-h-screen">
+		{% block content %}{% endblock %}
+	</div>
+	<div id="footer">
+		{% block footer %} &copy;
+		<a href="https://www.autoderm.firstderm.com/">AutoDerm</a>. {% endblock %}
+	</div>
+</body>
+
+</html>

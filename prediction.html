@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Predictions{% endblock %}
+{% block content %}
+<div class="w-2/3 mx-auto">
+	<div class="bg-white shadow-md my-6">
+		<table class="text-left w-full border-collapse">
+			<thead class="rounded-t-lg bg-blue-400">
+				<tr class="">
+					<th class="py-4 px-6font-bold uppercase text-center text-sm text-gray-800 border-b border-gray-100">
+						Prediction
+					</th>
+					<th class="py-4 px-6 font-bold uppercase text-center text-sm text-gray-800 border-b border-gray-100">
+						Actions
+					</th>
+				</tr>
+			</thead>
+			<tbody class="">
+				{% for prediction in predictions %}
+				<tr class="hover:bg-gray-50">
+					<td class="py-4 px-6 border-b border-gray-200 justify-between">
+						{{ prediction["name"] }}
+					</td>
+					<td class="flex justify-center lg:block py-4 px-6 border-b border-gray-200">
+						<div class="flex justify-center">
+							<a href="{{ prediction['readMoreUrl'] }}" class="text-gray-800 font-bold py-1 px-3 rounded text-xs bg-yellow-300">Read
+								More</a>
+							<a href="https://www.firstderm.com/ask-online-dermatologist/" class="text-gray-800 font-bold py-1 px-3 text-xs underline">Ask
+								a dermatologist</a>
+						</div>
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<p class="text-center mt-4 font-semibold">
+		Or <a class="underline text-blue-600" href="/"> send another image</a>
+	</p>
+</div>
+{% endblock %}
