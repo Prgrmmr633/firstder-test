@@ -30,10 +30,13 @@ async def process(
      )
 
     data = response.json()
-    predictions = data["predictions"]
+    predictions = data.get("predictions", [])
+
+    # Extract confidence scores from predictions
+    confidence_scores = [prediction.get("confidence", 0) for prediction in predictions]
 
     return templates.TemplateResponse(
-        "prediction.html", {"request": request, "predictions": predictions}
+        "prediction.html", {"request": request, "predictions": predictions, "confidence_scores": confidence_scores}
     )
 
 if __name__ == "__main__":
