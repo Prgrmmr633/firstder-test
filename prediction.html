@@ -18,17 +18,17 @@
 				</tr>
 			</thead>
 			<tbody class="">
-				{% for prediction, confidence_score in zip(predictions, confidence_scores) %}
+				{% for i in range(predictions|length) %}
 				<tr class="hover:bg-gray-50">
 					<td class="py-4 px-6 border-b border-gray-200 justify-between">
-						{{ prediction["name"] }}
+						{{ predictions[i]["name"] }}
 					</td>
 					<td class="py-4 px-6 border-b border-gray-200 justify-between">
-						{{ confidence_score }}
+						{{ confidence_scores[i] }}
 					</td>
 					<td class="flex justify-center lg:block py-4 px-6 border-b border-gray-200">
 						<div class="flex justify-center">
-							<a href="{{ prediction['readMoreUrl'] }}" class="text-gray-800 font-bold py-1 px-3 rounded text-xs bg-yellow-300">Read
+							<a href="{{ predictions[i]['readMoreUrl'] }}" class="text-gray-800 font-bold py-1 px-3 rounded text-xs bg-yellow-300">Read
 								More</a>
 							<!-- <a href="https://www.firstderm.com/ask-online-dermatologist/" class="text-gray-800 font-bold py-1 px-3 text-xs underline">Ask
 								a dermatologist</a> -->
