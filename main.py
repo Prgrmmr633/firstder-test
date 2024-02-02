@@ -25,7 +25,8 @@ async def process(
     image_contents = await image.read()
     response = requests.post(
         "https://autoderm.firstderm.com/v1/query?language=en&model=autoderm_v2_0",
-        headers={"Api-Key": os.getenv("API_KEY")},
+        # headers={"Api-Key": os.getenv("API_KEY")},
+        headers={"Api-Key": 5675fd21-7929-2597-6c8e-69e220ede9a2},
         files={"file": image_contents},
     )
 
