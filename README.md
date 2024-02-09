@@ -5,50 +5,23 @@
 
 ## Installation
 
-Clone the repository:
-
-```sh
-git clone https://github.com/polyrand/firstderm_demo.git
-```
-
-Install the requirements in your virtual environment:
+1. Install the latest python version from https://www.python.org/downloads/.
+2. Install the following dependencies:
 
 ```bash
 pip install fastapi
 pip install python-multipart
 pip install uvicorn
 pip install Jinja2
+pip install requests
 ```
 
-## Usage example
+3. Go to your python installation folder [C:\Program Files\Python312]
+4. Duplicate python.exe and rename to python3.exe
 
-You can run the app using [uvicorn](https://github.com/encode/uvicorn):
+## Usage
 
+Run the program with the following commandline:
 ```python
-uvicorn main:app --host 0.0.0.0 --port 8000
-# or...
 python3 main.py
 ```
-
-## Release History
-
-* 2.0
-    * Update to the new API
-* 1.0
-    * Initial post
-
-
-## Meta
-
-Ricardo Ander-Egg Aguilar – [@ricardoanderegg](https://twitter.com/ricardoanderegg) –
-
-[https://github.com/polyrand/](https://github.com/polyrand/)
-
-## Contributing
-
-1. Fork it (<https://github.com/polyrand/yourproject/fork>)
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Commit your changes (`git commit -am 'Add some fooBar'`)
-4. Push to the branch (`git push origin feature/fooBar`)
-5. Create a new Pull Request
-
