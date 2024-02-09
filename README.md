@@ -1,7 +1,7 @@
-# API demo
-> An example of how easily you can introduce FirstDerm's API in your product.
+# DERMAFY demo
+> Demo on Dermafy: Innovative AI Skin Disease Diagnosis Application
 
-![](https://www.firstderm.com/wp-content/uploads/2017/01/firstderm_tm.png)
+<!-- ![](https://www.firstderm.com/wp-content/uploads/2017/01/firstderm_tm.png) -->
 
 ## Installation
 
