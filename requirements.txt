@@ -2,4 +2,6 @@ fastapi==0.68.0
 python-multipart==0.0.5
 uvicorn==0.15.0
 Jinja2==3.0.1
-requests==2.26.0
+oequests==2.26.0
+Flask==2.1.0
+SQLAlchemy==1.4.31
