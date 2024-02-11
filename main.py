@@ -11,6 +11,7 @@ from fastapi.templating import Jinja2Templates
 import uvicorn
 import requests
 import os
+import json
 
 templates = Jinja2Templates(directory=".")
 app = FastAPI()
@@ -72,7 +73,29 @@ async def process(
         files={"file": image_contents},
     )
 
-    data = response.json()
+    # resolve json error
+    # data = response.json()
+
+    # In the process function (resolve json error)
+    # ...
+    # Make the HTTP request
+    data = {}
+
+    response = requests.get("https://autoderm.firstderm.com/v1/query")
+
+    # Check the status code of the response
+    if response.status_code != 200:
+        # Handle error status codes here
+        print(f"Error: HTTP request returned status code {response.status_code}")
+    else:
+        # Try to parse the response as JSON
+        try:
+            data = response.json()
+        except json.JSONDecodeError:
+            # Handle empty responses here
+            print("Warning: HTTP request returned empty response")
+    # ...
+
     predictions = data.get("predictions", [])
 
     # Extract confidence scores from predictions

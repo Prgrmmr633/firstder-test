@@ -20,7 +20,7 @@ class Prediction(Base):
     __tablename__ = "predictions"
 
     id = Column(Integer, primary_key=True)
-    # name = Column(String)
+    name = Column(String)
     confidence_score = Column(Float)
     read_more_url = Column(String)
 
@@ -33,7 +33,7 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-# # Example of how to add a new prediction
+# Example of how to add a new prediction
 # new_prediction = Prediction(name="Example", confidence_score=0.95, read_more_url="http://example.com")
 # session.add(new_prediction)
 # session.commit()
