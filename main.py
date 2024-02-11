@@ -30,9 +30,8 @@ class UserInput(BaseModel):
     image: str
     prediction_id: int
 
-
 # Connect database
-def get db():
+def get_db():
     db = SessionLocal()
     try:
         yield db
