@@ -25,7 +25,7 @@ class Prediction(Base):
 
 
 # Set up the database
-engine = create_engine("postgresql://admin:admin@localhost:5432/mydatabase")
+engine = create_engine("postgresql://postgres:admin123@localhost:5432/Dermafy")
 Base.metadata.create_all(engine)
 
 # Create a session
