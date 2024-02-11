@@ -1,8 +1,8 @@
 # Main imports
 from fastapi import FastAPI, Form, UploadFile, Request, Response, status, HTTPException, Depends
-from pydantic import BaseModel
+from pydantic import BaseModel, HttpUrl
 import models
-from typing import List, Annotated
+from typing import List, Annotated, Optional
 from database import SessionLocal, engine
 from sqlalchemy.orm import Session
 # Extra imports
@@ -21,7 +21,8 @@ models.Base.metadata.create_all(bind=engine)
 class Prediction(BaseModel):
     name: str
     confidence: float
-    read_more_url: str
+    # read_more_url: str
+    read_more_url: Optional[HttpUrl] = None
 
 
 class Predictions(BaseModel):
@@ -83,6 +84,7 @@ async def process(
         db_prediction = Prediction(name=prediction['name'], confidence=prediction['confidence'])
         db.add(db_prediction)
     db.commit()
+        
 
     return templates.TemplateResponse(
         "prediction.html", {"request": request, "predictions": predictions, "confidence_scores": confidence_scores}
