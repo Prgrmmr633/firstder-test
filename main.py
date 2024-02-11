@@ -1,25 +1,45 @@
-from pyexpat import model
+# Main imports
 from fastapi import FastAPI, Form, UploadFile, Request, Response, status, HTTPException, Depends
-from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
+import models
 from typing import List, Annotated
+from database import SessionLocal, engine
+from sqlalchemy.orm import Session
+# Extra imports
+from pyexpat import model
+from fastapi.templating import Jinja2Templates
 import uvicorn
 import requests
 import os
 
+
 templates = Jinja2Templates(directory=".")
 app = FastAPI()
+models.Base.metadata.create_all(bind=engine)
 
 # Pydantic BaseModels
 class Prediction(BaseModel):
     name: str
     confidence: float
+    read_more_url: str
 
 class Predictions(BaseModel):
     predictions: List[Prediction]
 
-# API Endpoints
+class UserInput(BaseModel):
+    image: str
+    prediction_id: int
 
+
+# Connect database
+def get db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+# API Endpoints
 @app.get("/")
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})

@@ -1,20 +1,31 @@
 from sqlalchemy import Column, String, Float, create_engine, Boolean, ForeignKey, Integer
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from database import Base
 
 Base = declarative_base()
 
 
+# User input model
+class UserInput(Base):
+    __tablename__ = "user_inputs"
+
+    id = Column(Integer, primary_key=True)
+    image = Column(String)
+    prediction_id = Column(Integer, ForeignKey("predictions.id"))
+
+
+# Define the Prediction model
 class Prediction(Base):
     __tablename__ = "predictions"
 
-    name = Column(String, primary_key=True)
+    id = Column(Integer, primary_key=True)
     confidence_score = Column(Float)
     read_more_url = Column(String)
 
 
 # Set up the database
-engine = create_engine("postgresql://user:password@localhost:5432/mydatabase")
+engine = create_engine("postgresql://admin:admin@localhost:5432/mydatabase")
 Base.metadata.create_all(engine)
 
 # Create a session
