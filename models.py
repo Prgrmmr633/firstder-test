@@ -20,6 +20,7 @@ class Prediction(Base):
     __tablename__ = "predictions"
 
     id = Column(Integer, primary_key=True)
+    # name = Column(String)
     confidence_score = Column(Float)
     read_more_url = Column(String)
 
