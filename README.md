@@ -1,33 +1,50 @@
-# DERMAFY demo
+# DERMAFY Demo
 
 > Demo on Dermafy: Innovative AI Skin Disease Diagnosis Application
 
-<!-- ![](https://www.firstderm.com/wp-content/uploads/2017/01/firstderm_tm.png) -->
-
 ## Installation
 
-1. Install the latest python version from https://www.python.org/downloads/.
+### Prerequisites
 
-2. Go to file repository directory
+Before proceeding with the installation of the DERMAFY demo, ensure you have the following prerequisites installed:
 
-```bash
-cd firstder-test
-```
+- **Python**: The programming language used to build the application.
+- **FastAPI**: A modern, fast (high-performance) web framework for building APIs with Python based on standard Python type hints.
+- **SQLAlchemy**: The Python SQL toolkit and Object-Relational Mapping (ORM) library that gives application developers the full power and flexibility of SQL.
+- **PostgreSQL**: The open-source relational database used for storing the application data.
 
-3. Install the dependencies:
+### Detailed Steps
 
-```bash
-pip install -r requirements.txt
-```
+1. **Install Python**
 
-3. Go to your python installation folder [C:\Program Files\Python312]
+   Download and install the latest version of Python from [https://www.python.org/downloads/](https://www.python.org/downloads/).
 
-4. Duplicate python.exe and rename to python3.exe
+2. **Install PostgreSQL**
+
+   Follow the installation guide for PostgreSQL on your operating system. This involves downloading PostgreSQL, installing it, and possibly configuring it to start automatically.
+
+3. **Setup the Application Environment**
+
+   - Navigate to the file repository directory:
+
+     ```bash
+     cd firstderm-test
+     ```
+
+   - Install the dependencies including FastAPI and SQLAlchemy (these should be listed in your `requirements.txt` file):
+
+     ```bash
+     pip install -r requirements.txt
+     ```
+
+   - For Windows users, go to your Python installation folder (e.g., `C:\Program Files\Python312`).
+
+   - Duplicate `python.exe` and rename it to `python3.exe`. This step ensures compatibility with scripts that explicitly call `python3`.
 
 ## Usage
 
-Run the program with the following commandline:
+To run the DERMAFY demo application, use the following command:
 
-```python
+```bash
 python3 main.py
 ```
