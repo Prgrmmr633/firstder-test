@@ -1,5 +1,8 @@
-{% extends "base.html" %} {% block title %}Predictions{% endblock %} {% block content %}
+{% extends "base.html" %}
+{% block title %}Predictions{% endblock %}
+{% block content %}
 <div class="w-2/3 mx-auto">
+  <img src="{{ url_for('static', path=image_url) }}" alt="Uploaded Image" class="my-4 mx-auto max-w-full">
   <div class="bg-white shadow-md my-6">
     <table class="text-left w-full border-collapse">
       <thead class="rounded-t-lg bg-blue-400">
@@ -10,22 +13,60 @@
         </tr>
       </thead>
       <tbody class="">
-        {% for i in range(predictions|length) %}
         <tr class="hover:bg-gray-50">
-          <td class="py-4 px-6 border-b border-gray-200 justify-between">{{ predictions[i]["name"] }}</td>
-          <td class="py-4 px-6 border-b border-gray-200 justify-between">{{ (confidence_scores[i] * 100)|float|round(1) }}%</td>
+          <td class="py-4 px-6 border-b border-gray-200 justify-between">Wart</td>
+          <td class="py-4 px-6 border-b border-gray-200 justify-between">90%</td>
           <td class="flex justify-center lg:block py-4 px-6 border-b border-gray-200">
             <div class="flex justify-center">
-              <a href="{{ predictions[i]['readMoreUrl'] }}" class="text-gray-800 font-bold py-1 px-3 rounded text-xs bg-yellow-300">Read More</a>
-              <!-- <a href="https://www.firstderm.com/ask-online-dermatologist/" class="text-gray-800 font-bold py-1 px-3 text-xs underline">Ask
-								a dermatologist</a> -->
+              <a href="https://example.com/wart" class="text-gray-800 font-bold py-1 px-3 rounded text-xs bg-yellow-300">Learn More</a>
             </div>
           </td>
         </tr>
-        {% endfor %}
+        <tr class="hover:bg-gray-50">
+          <td class="py-4 px-6 border-b border-gray-200 justify-between">Mole</td>
+          <td class="py-4 px-6 border-b border-gray-200 justify-between">85%</td>
+          <td class="flex justify-center lg:block py-4 px-6 border-b border-gray-200">
+            <div class="flex justify-center">
+              <a href="https://example.com/mole" class="text-gray-800 font-bold py-1 px-3 rounded text-xs bg-yellow-300">Learn More</a>
+            </div>
+          </td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="py-4 px-6 border-b border-gray-200 justify-between">Acne</td>
+          <td class="py-4 px-6 border-b border-gray-200 justify-between">80%</td>
+          <td class="flex justify-center lg:block py-4 px-6 border-b border-gray-200">
+            <div class="flex justify-center">
+              <a href="https://example.com/acne" class="text-gray-800 font-bold py-1 px-3 rounded text-xs bg-yellow-300">Learn More</a>
+            </div>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
-  <p class="text-center mt-4 font-semibold">Or <a class="underline text-blue-600" href="/"> send another image</a></p>
+  <div class="flex justify-center mt-4">
+    <form id="saveResultsForm" action="/save_results" method="post">
+      <input type="hidden" name="image_path" value="{{ image_url }}">
+      <input type="hidden" name="predictions" value="Mole">
+      <input type="hidden" name="confidence_scores" value="0.8">
+      <input type="hidden" name="read_more_urls" value="https://example.com/mole">
+      <input type="hidden" name="predictions" value="Wart">
+      <input type="hidden" name="confidence_scores" value="0.75">
+      <input type="hidden" name="read_more_urls" value="https://example.com/wart">
+      <input type="hidden" name="predictions" value="Acne">
+      <input type="hidden" name="confidence_scores" value="0.9">
+      <input type="hidden" name="read_more_urls" value="https://example.com/acne">
+      <button id="saveResultsBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2" type="submit">
+        Save Results
+      </button>
+    </form>
+    <button id="submitAnotherBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2">
+      Submit Another Image
+    </button>
+  </div>
 </div>
+<script>
+  document.getElementById("submitAnotherBtn").addEventListener("click", function() {
+    window.location.href = "/";  // Redirect to the homepage ("/") when the button is clicked
+  });
+</script>
 {% endblock %}

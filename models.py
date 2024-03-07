@@ -1,21 +1,10 @@
-from sqlalchemy import Column, String, Float, create_engine, Boolean, ForeignKey, Integer
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import Column, String, Float, ForeignKey, Integer, DateTime
+from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
-from database import Base
+from sqlalchemy import create_engine
 
 Base = declarative_base()
 
-
-# User input model
-class UserInput(Base):
-    __tablename__ = "user_inputs"
-
-    id = Column(Integer, primary_key=True)
-    image = Column(String)
-    prediction_id = Column(Integer, ForeignKey("predictions.id"))
-
-
-# Define the Prediction model
 class Prediction(Base):
     __tablename__ = "predictions"
 
@@ -23,17 +12,23 @@ class Prediction(Base):
     name = Column(String)
     confidence_score = Column(Float)
     read_more_url = Column(String)
+    date_added = Column(DateTime)
 
+    user_inputs = relationship("UserInput", back_populates="prediction")
 
-# Set up the database
+class UserInput(Base):
+    __tablename__ = "user_inputs"
+
+    id = Column(Integer, primary_key=True)
+    image = Column(String)
+    prediction_id = Column(Integer, ForeignKey("predictions.id"))
+    date_added = Column(DateTime)
+
+    prediction = relationship("Prediction", back_populates="user_inputs")
+
+# Set up the database (only create the engine here)
 engine = create_engine("postgresql://postgres:admin123@localhost:5432/Dermafy")
-Base.metadata.create_all(engine)
 
 # Create a session
 Session = sessionmaker(bind=engine)
 session = Session()
-
-# Example of how to add a new prediction
-# new_prediction = Prediction(name="Example", confidence_score=0.95, read_more_url="http://example.com")
-# session.add(new_prediction)
-# session.commit()
