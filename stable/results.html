@@ -19,7 +19,7 @@
           <td class="py-4 px-6 border-b border-gray-200 justify-between">{{ result.date_added }}</td>
           <td class="py-4 px-6 border-b border-gray-200 justify-between">{{ result.name }}</td>
           <td class="py-4 px-6 border-b border-gray-200 justify-between">{{ (result.confidence_score * 100)|float|round(1) }}%</td>
-          <td class="py-4 px-6 border-b border-gray-200 justify-between"><a href="/result/{{ result.id }}?prediction_date={{ result.date_added }}" class="text-gray-800 font-bold py-1 px-3 rounded text-xs bg-yellow-300">Learn More</a></td>        
+          <td class="py-4 px-6 border-b border-gray-200 justify-between"><a href="/result/{{ result.id }}" class="text-gray-800 font-bold py-1 px-3 rounded text-xs bg-yellow-300">Learn More</a></td>
         </tr>
         {% endfor %}
       </tbody>

@@ -3,7 +3,6 @@
 {% block content %}
 <div class="w-2/3 mx-auto">
   <h1 class="font-bold mb-10 text-center">Result Details</h1>
-  <p class="text-center mb-4">Prediction Date: {{ prediction_date }}</p>
   <div class="bg-white shadow-md my-6">
     <img src="{{ url_for('static', path=result.image) }}" alt="Uploaded Image" class="my-4 mx-auto max-w-full">
     <table class="text-left w-full border-collapse">
@@ -15,19 +14,15 @@
         </tr>
       </thead>
       <tbody class="">
-        {% for prediction in predictions %}
-          {% if prediction.date_added == prediction_date %}
-            <tr class="hover:bg-gray-50">
-              <td class="py-4 px-6 border-b border-gray-200 justify-between">{{ prediction.name }}</td>
-              <td class="py-4 px-6 border-b border-gray-200 justify-between">{{ (prediction.confidence_score * 100)|float|round(1) }}%</td>
-              <td class="flex justify-center lg:block py-4 px-6 border-b border-gray-200">
-                <div class="flex justify-center">
-                  <a href="{{ prediction.read_more_url }}" class="text-gray-800 font-bold py-1 px-3 rounded text-xs bg-yellow-300">Learn More</a>
-                </div>
-              </td>
-            </tr>
-          {% endif %}
-        {% endfor %}
+        <tr class="hover:bg-gray-50">
+          <td class="py-4 px-6 border-b border-gray-200 justify-between">{{ result.prediction.name }}</td>
+          <td class="py-4 px-6 border-b border-gray-200 justify-between">{{ (result.prediction.confidence_score * 100)|float|round(1) }}%</td>
+          <td class="flex justify-center lg:block py-4 px-6 border-b border-gray-200">
+            <div class="flex justify-center">
+              <a href="{{ result.prediction.read_more_url }}" class="text-gray-800 font-bold py-1 px-3 rounded text-xs bg-yellow-300">Learn More</a>
+            </div>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
