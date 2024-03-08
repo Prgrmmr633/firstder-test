@@ -1,9 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Predictions{% endblock %}
+{% block title %}Result Details{% endblock %}
 {% block content %}
 <div class="w-2/3 mx-auto">
-  <img src="{{ url_for('static', path=image_url) }}" alt="Uploaded Image" class="my-4 mx-auto max-w-full shadow-md" style="height: 40vh;">
+  <h1 class="font-bold mb-10 text-center">Result Details</h1>
   <div class="bg-white shadow-md my-6">
+    <img src="{{ url_for('static', path=result.image) }}" alt="Uploaded Image" class="my-4 mx-auto max-w-full">
     <table class="text-left w-full border-collapse">
       <thead class="rounded-t-lg bg-blue-400">
         <tr class="">
@@ -13,37 +14,24 @@
         </tr>
       </thead>
       <tbody class="">
-        {% for i in range(predictions|length) %}
         <tr class="hover:bg-gray-50">
-          <td class="py-4 px-6 border-b border-gray-200 justify-between">{{ predictions[i]["name"] }}</td>
-          <td class="py-4 px-6 border-b border-gray-200 justify-between">{{ (confidence_scores[i] * 100)|float|round(1) }}%</td>
+          <td class="py-4 px-6 border-b border-gray-200 justify-between">{{ result.prediction.name }}</td>
+          <td class="py-4 px-6 border-b border-gray-200 justify-between">{{ (result.prediction.confidence_score * 100)|float|round(1) }}%</td>
           <td class="flex justify-center lg:block py-4 px-6 border-b border-gray-200">
             <div class="flex justify-center">
-              <a href="{{ predictions[i]['readMoreUrl'] }}" class="text-gray-800 font-bold py-1 px-3 rounded text-xs bg-yellow-300">Read More</a>
-              <input type="hidden" name="read_more_urls" value="{{ predictions[i]['readMoreUrl'] }}">
+              <a href="{{ result.prediction.read_more_url }}" class="text-gray-800 font-bold py-1 px-3 rounded text-xs bg-yellow-300">Learn More</a>
             </div>
           </td>
         </tr>
-        {% endfor %}
       </tbody>
     </table>
   </div>
   <div class="flex justify-center mt-4">
-    <button id="saveResultsBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
-      Save Results
-    </button>
     <button id="submitAnotherBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2">
       Submit Another Image
     </button>
   </div>
 </div>
-<form id="saveResultsForm" action="/save_results" method="post" style="display: none;">
-  {% for i in range(predictions|length) %}
-  <input type="hidden" name="predictions" value="{{ predictions[i]['name'] }}">
-  <input type="hidden" name="confidence_scores" value="{{ confidence_scores[i] }}">
-  <input type="hidden" name="read_more_urls" value="{{ predictions[i]['readMoreUrl'] }}">
-  {% endfor %}
-</form>
 <script>
   document.getElementById("submitAnotherBtn").addEventListener("click", function() {
     window.location.href = "/";  // Redirect to the homepage ("/") when the button is clicked

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Past Results{% endblock %}
+{% block content %}
+<div class="w-2/3 mx-auto">
+  <h1 class="font-bold mb-6 text-center">Past Results</h1>
+  <div class="bg-white shadow-md my-6">
+    <table class="text-left w-full border-collapse">
+      <thead class="rounded-t-lg bg-blue-400">
+        <tr class="">
+          <th class="py-4 px-6 font-bold uppercase text-center text-sm text-gray-800 border-b border-gray-100">Date</th>
+          <th class="py-4 px-6 font-bold uppercase text-center text-sm text-gray-800 border-b border-gray-100">Prediction</th>
+          <th class="py-4 px-6 font-bold uppercase text-center text-sm text-gray-800 border-b border-gray-100">Confidence Score</th>
+          <th class="py-4 px-6 font-bold uppercase text-center text-sm text-gray-800 border-b border-gray-100">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="">
+        {% set sorted_results = results|sort(attribute='date_added', reverse=true) %}
+        {% for result in sorted_results %}
+        <tr class="hover:bg-gray-50">
+          <td class="py-4 px-6 border-b border-gray-200 text-center">{{ result.date_added.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+          <td class="py-4 px-6 border-b border-gray-200 text-center">{{ result.name }}</td>
+          <td class="py-4 px-6 border-b border-gray-200 text-center">{{ (result.confidence_score * 100)|float|round(1) }}%</td>
+          <td class="py-4 px-6 border-b border-gray-200 text-center"><a href="/result/{{ result.id }}?prediction_date={{ result.date_added }}" class="text-gray-800 font-bold py-1 px-3 rounded text-xs bg-yellow-300">View Result</a></td>        
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="flex justify-center mt-4">
+    <a href="/" class="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Back</a>
+  </div>
+</div>
+{% endblock %}

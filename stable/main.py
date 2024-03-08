@@ -116,25 +116,11 @@ async def view_results(request: Request, db: Session = db_dependency):
 
     return templates.TemplateResponse("results.html", {"request": request, "results": results})
 
-
 @app.get("/result/{result_id}", response_class=HTMLResponse)
-async def view_result(request: Request, result_id: int, prediction_date: str, db: Session = db_dependency):
+async def view_result(request: Request, result_id: int, db: Session = db_dependency):
     result = db.query(UserInput).filter_by(id=result_id).first()
 
-    # Convert prediction_date to a datetime object
-    prediction_date = datetime.strptime(prediction_date, "%Y-%m-%d %H:%M:%S.%f")
-
-    print("Requested prediction date:", prediction_date)
-
-    # Fetch predictions and filter them based on the prediction_date
-    predictions = (
-        db.query(Prediction)
-        .join(UserInput, Prediction.id == UserInput.prediction_id)
-        .filter(func.date(UserInput.date_added) == prediction_date.date())
-        .all()
-    )
-
-    return templates.TemplateResponse("results_details.html", {"request": request, "result": result, "predictions": predictions, "prediction_date": prediction_date})
+    return templates.TemplateResponse("results_details.html", {"request": request, "result": result})
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="localhost", port=3100, reload=False)
