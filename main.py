@@ -14,6 +14,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import func
 from datetime import datetime
 
+
 templates = Jinja2Templates(directory=".")
 app = FastAPI()
 
@@ -30,11 +31,16 @@ current_directory = os.path.dirname(os.path.abspath(__file__))
 static_directory = os.path.join(current_directory, "static")
 os.makedirs(static_directory, exist_ok=True)
 
-app.mount("/static", StaticFiles(directory=static_directory), name="static") 
+app.mount("/static", StaticFiles(directory=static_directory), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/")
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
+# @app.get("/")
+# async def hero(request: Request):
+#     return templates.TemplateResponse("hero.html", {"request": request})
 
 @app.head("/", status_code=200)
 async def health(response: Response):
