@@ -70,5 +70,9 @@
   document.getElementById("submitAnotherBtn").addEventListener("click", function() {
     window.location.href = "/";  // Redirect to the homepage ("/") when the button is clicked
   });
+  
+  document.getElementById("saveResultsBtn").addEventListener("click", function() {
+    document.getElementById("saveResultsForm").submit(); // Submit the form when the button is clicked
+  });
 </script>
 {% endblock %}
