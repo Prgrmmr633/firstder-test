@@ -28,7 +28,7 @@ Before proceeding with the installation of the DERMAFY demo, ensure you have the
    - Navigate to the file repository directory:
 
      ```bash
-     cd firstderm-test
+     cd firstder-test
      ```
 
    - Install the dependencies including FastAPI and SQLAlchemy (these should be listed in your `requirements.txt` file):
