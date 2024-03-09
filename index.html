@@ -4,8 +4,8 @@
 <div class="mt-2 p-8 bg-white shadow-md rounded-lg">
   <label class="block text-gray-700 text-4xl font-bold text-center pb-2" 
   style="background-clip: text; -webkit-background-clip: text; color: transparent;
-  background-image: linear-gradient(to right, #2563eb, #2dd4bf);"> Dermafy Now! </label>
-  <label class="block text-gray-700 text-2xl text-center pt-4"> Instructions! </label>
+  background-image: linear-gradient(to right, #2563eb, #2dd4bf);"> Dermafy Now </label>
+  <label class="block text-gray-700 text-2xl text-center pt-4"> Instructions </label>
   <img src="{{ url_for('static', path='/asset/uploader_instructions.png') }}" alt="instructions" class="mx-auto h-72 rounded-lg">
   <form class="w-full p-6" method="post" enctype="multipart/form-data" action="/image">
     <div class="flex -mx-3 mb-6">
@@ -14,7 +14,7 @@
           <!-- Photo Function Should be Placed Here! -->
           <div class="w-1/2 h-36 flex items-center justify-center cursor-pointer bg-blue-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 m-4">
             <label for="image" class="text-center cursor-pointer text-3xl">
-              Take A </br> Photo
+              Take A <br> Photo
             </label>
             <input
               class="opacity-0 absolute h-32 cursor-pointer"
@@ -22,13 +22,12 @@
               id="image"
               name="image"
               accept="image/*"
-              disabled
             />
           </div>
           
           <div class="w-1/2 h-36 flex items-center justify-center cursor-pointer bg-blue-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 m-4">
             <label for="uploadImage" class="text-center cursor-pointer text-3xl">
-              Upload Image
+              Upload <br> Image
             </label>
             <input
               class="opacity-0 absolute h-32 cursor-pointer"
@@ -36,7 +35,6 @@
               id="uploadImage"
               name="uploadImage"
               accept="image/*"
-              disabled
             />
           </div>
         </div>
@@ -70,8 +68,8 @@
       var submitButton = document.getElementById("submitButton");
 
       // Enable/disable buttons based on checkbox state
-      photoButton.disabled = !checkbox.checked;
-      uploadButton.disabled = !checkbox.checked;
+      // photoButton.disabled = !checkbox.checked;
+      // uploadButton.disabled = !checkbox.checked;
       submitButton.disabled = !checkbox.checked;
     }
   </script>
