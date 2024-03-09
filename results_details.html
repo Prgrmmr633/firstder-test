@@ -2,10 +2,12 @@
 {% block title %}Result Details{% endblock %}
 {% block content %}
 <div class="w-2/3 mx-auto">
-  <h1 class="font-bold mb-10 text-center">Result Details</h1>
+  <label class="block text-gray-700 text-4xl font-bold text-center pb-2" 
+  style="background-clip: text; -webkit-background-clip: text; color: transparent;
+  background-image: linear-gradient(to right, #2563eb, #2dd4bf);"> Results Details </label>
   <p class="text-center mb-4">Prediction Date: {{ prediction_date.strftime('%Y-%m-%d %H:%M:%S') }}</p>
   <div class="bg-gray-800 shadow-md rounded-lg py-2">
-    <img src="{{ url_for('static', path=result.image) }}" alt="Uploaded Image" class="my-4 mx-auto max-w-full shadow-md" style="height: 40vh;">
+    <img src="{{ url_for('static', path=result.image) }}" alt="Uploaded Image" class="my-4 mx-auto max-w-full shadow-md" style="height: 30vh;">
     <table class="text-left w-full border-collapse">
       <thead class="bg-gray-800">
         <tr class="">
