@@ -22,7 +22,6 @@
               id="image"
               name="image"
               accept="image/*"
-              disabled
             />
           </div>
           
@@ -36,7 +35,6 @@
               id="uploadImage"
               name="uploadImage"
               accept="image/*"
-              disabled
             />
           </div>
         </div>
@@ -70,8 +68,8 @@
       var submitButton = document.getElementById("submitButton");
 
       // Enable/disable buttons based on checkbox state
-      photoButton.disabled = !checkbox.checked;
-      uploadButton.disabled = !checkbox.checked;
+      // photoButton.disabled = !checkbox.checked;
+      // uploadButton.disabled = !checkbox.checked;
       submitButton.disabled = !checkbox.checked;
     }
   </script>
