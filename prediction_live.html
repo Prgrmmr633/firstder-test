@@ -37,7 +37,8 @@
     </button>
   </div>
 </div>
-<form id="saveResultsForm" action="/save_results" method="post" style="display: none;">
+<form id="saveResultsForm" action="/save_results" method="post"> <!-- Removed style="display: none;" -->
+  <input type="hidden" name="image_path" value="{{ image_url }}">
   {% for i in range(predictions|length) %}
   <input type="hidden" name="predictions" value="{{ predictions[i]['name'] }}">
   <input type="hidden" name="confidence_scores" value="{{ confidence_scores[i] }}">
@@ -47,6 +48,10 @@
 <script>
   document.getElementById("submitAnotherBtn").addEventListener("click", function() {
     window.location.href = "/";  // Redirect to the homepage ("/") when the button is clicked
+  });
+  
+  document.getElementById("saveResultsBtn").addEventListener("click", function() {
+    document.getElementById("saveResultsForm").submit(); // Submit the form when the button is clicked
   });
 </script>
 {% endblock %}
