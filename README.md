@@ -48,3 +48,12 @@ To run the DERMAFY demo application, use the following command:
 ```bash
 python3 main.py
 ```
+
+### Contributors
+
+```bash
+Co-authored-by: 9QIX
+Co-authored-by: TadWeird
+Co-authored-by: Kyuery
+Co-authored-by: Prgrmmr633
+```
