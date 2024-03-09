@@ -21,7 +21,7 @@
           <td class="py-4 px-6 border-b border-gray-200 justify-between">{{ (confidence_scores[i] * 100)|float|round(1) }}%</td>
           <td class="flex justify-center lg:block py-4 px-6 border-b border-gray-200">
             <div class="flex justify-center">
-              <a href="{{ predictions[i]['readMoreUrl'] }}" class="text-white font-bold py-1 px-3 rounded text-xs bg-blue-500 hover:bg-blue-700">Learn More</a>
+              <a href="{{ predictions[i]['readMoreUrl'] }}" class="text-white font-bold py-1 px-3 rounded text-xs bg-green-500 hover:bg-green-700">Learn More</a>
               <input type="hidden" name="read_more_urls" value="{{ predictions[i]['readMoreUrl'] }}">
             </div>
           </td>
@@ -34,7 +34,7 @@
     <button id="saveResultsBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
       Save Results
     </button>
-    <button id="submitAnotherBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2">
+    <button id="submitAnotherBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2">
       Submit Another Image
     </button>
   </div>

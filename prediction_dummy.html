@@ -2,23 +2,25 @@
 {% block title %}Predictions{% endblock %}
 {% block content %}
 <div class="w-2/3 mx-auto">
-  <img src="{{ url_for('static', path=image_url) }}" alt="Uploaded Image" class="my-4 mx-auto max-w-full shadow-md" style="height: 40vh;">
-  <div class="bg-white shadow-md my-6">
-    <table class="text-left w-full border-collapse rounded-t-lg">
-      <thead class="rounded-t-lg bg-gray-800">
+  <label class="block text-gray-700 text-4xl font-bold text-center pb-2" style="background-clip: text; -webkit-background-clip: text; color: transparent;
+  background-image: linear-gradient(to right, #2563eb, #2dd4bf)">Your Image</label>
+  <img src="{{ url_for('static', path=image_url) }}" alt="Uploaded Image" class="my-4 mx-auto max-w-full shadow-md rounded-lg" style="height: 40vh;">
+  <div class="bg-gray-800 shadow-md rounded-lg py-2">
+    <table class="text-left w-full border-collapse">
+      <thead class=" bg-gray-800">
         <tr class="">
-          <th class="py-4 px-6 font-bold uppercase text-center text-sm text-gray-800 border-b border-gray-100">Prediction</th>
-          <th class="py-4 px-6 font-bold uppercase text-center text-sm text-gray-800 border-b border-gray-100">Confidence Score</th>
-          <th class="py-4 px-6 font-bold uppercase text-center text-sm text-gray-800 border-b border-gray-100">Actions</th>
+          <th class="py-4 px-6 font-bold uppercase text-center text-sm text-white border-b">Prediction</th>
+          <th class="py-4 px-6 font-bold uppercase text-center text-sm text-white border-b">Confidence Score</th>
+          <th class="py-4 px-6 font-bold uppercase text-center text-sm text-white border-b">Actions</th>
         </tr>
       </thead>
-      <tbody class="">
+      <tbody class="bg-white text-center">
         <tr class="hover:bg-gray-50">
           <td class="py-4 px-6 border-b border-gray-200 justify-between">Wart</td>
           <td class="py-4 px-6 border-b border-gray-200 justify-between">90%</td>
           <td class="flex justify-center lg:block py-4 px-6 border-b border-gray-200">
             <div class="flex justify-center">
-              <a href="https://example.com/wart" class="text-gray-800 font-bold py-1 px-3 rounded text-xs bg-yellow-300">Learn More</a>
+              <a href="https://example.com/wart" class="text-white font-bold py-1 px-3 rounded text-xs bg-green-500 hover:bg-green-700">Learn More</a>
             </div>
           </td>
         </tr>
@@ -27,7 +29,7 @@
           <td class="py-4 px-6 border-b border-gray-200 justify-between">85%</td>
           <td class="flex justify-center lg:block py-4 px-6 border-b border-gray-200">
             <div class="flex justify-center">
-              <a href="https://example.com/mole" class="text-gray-800 font-bold py-1 px-3 rounded text-xs bg-yellow-300">Learn More</a>
+              <a href="https://example.com/mole" class="text-white font-bold py-1 px-3 rounded text-xs bg-green-500 hover:bg-green-700">Learn More</a>
             </div>
           </td>
         </tr>
@@ -36,14 +38,14 @@
           <td class="py-4 px-6 border-b border-gray-200 justify-between">80%</td>
           <td class="flex justify-center lg:block py-4 px-6 border-b border-gray-200">
             <div class="flex justify-center">
-              <a href="https://example.com/acne" class="text-gray-800 font-bold py-1 px-3 rounded text-xs bg-yellow-300">Learn More</a>
+              <a href="https://example.com/acne" class="text-white font-bold py-1 px-3 rounded text-xs bg-green-500 hover:bg-green-700">Learn More</a>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-  <div class="flex justify-center mt-4">
+  <div class="flex justify-center  mt-4">
     <form id="saveResultsForm" action="/save_results" method="post">
       <input type="hidden" name="image_path" value="{{ image_url }}">
       <input type="hidden" name="predictions" value="Mole">
