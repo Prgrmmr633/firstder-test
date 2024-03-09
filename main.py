@@ -104,18 +104,16 @@ async def save_results(
 
 @app.get("/results", response_class=HTMLResponse)
 async def view_results(request: Request, db: Session = db_dependency):
-    subquery = db.query(func.max(Prediction.confidence_score).label("max_confidence")).group_by(func.date(Prediction.date_added)).subquery()
     results = (
         db.query(Prediction)
         .join(UserInput, Prediction.id == UserInput.prediction_id)
         .filter(func.date(Prediction.date_added) == func.date(UserInput.date_added))
-        .filter(Prediction.confidence_score == subquery.c.max_confidence)
         .order_by(Prediction.date_added)
+        .filter(Prediction.id % 5 == 1)  # Filter every 5th row
         .all()
     )
 
     return templates.TemplateResponse("results.html", {"request": request, "results": results})
-
 
 @app.get("/result/{result_id}", response_class=HTMLResponse)
 async def view_result(request: Request, result_id: int, prediction_date: str, db: Session = db_dependency):
