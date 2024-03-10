@@ -22,13 +22,12 @@
           </div> -->
 
           <!-- Photo Function Placed Here! -->
-          <!-- Photo Function Placed Here! -->
           <div id="camera" class="w-1/2 h-36 flex items-center justify-center cursor-pointer bg-blue-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 m-4">
             <label id="takePhoto" class="text-center cursor-pointer text-3xl" onclick="openWebcam()">
               Take A <br />
               Photo
             </label>
-            <input type="hidden" type="file" id="uploadImage" name="uploadImage" accept="image/*" />
+            <input class="opacity-0 absolute h-32 cursor-pointer" type="file" id="image" name="image" accept="image/*" />
           </div>
 
           <!-- Upload Image Function -->
@@ -124,31 +123,8 @@
             document.getElementById("photo").value = imageData;
           });
 
-          // Done button function
-          // Close the webcam modal when the "Done" button is clicked
           document.getElementById("done").addEventListener("click", function () {
             modal.style.display = "none";
-            video.style.display = "block";
-            canvas.style.display = "none";
-            snapButton.style.display = "block";
-            document.getElementById("done").style.display = "none";
-
-            // Get the image data from the hidden input field
-            var imageData = document.getElementById("photo").value;
-
-            // Send the image data to the server
-            fetch("your-server-url", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ image: imageData }),
-            })
-              .then((response) => response.json())
-              .then((data) => console.log(data))
-              .catch((error) => {
-                console.error("Error:", error);
-              });
           });
         })
         .catch(function (err) {
