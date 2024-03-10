@@ -91,11 +91,16 @@
   </div>
 </div>
 <script>
-  document.getElementById("submitAnotherBtn").addEventListener("click", function() {
-    window.location.href = "/";  // Redirect to the homepage ("/") when the button is clicked
+  // Redirect to the content section of the page when the page loads
+  window.onload = function () {
+    window.location.href = "#content";
+  };
+
+  document.getElementById("submitAnotherBtn").addEventListener("click", function () {
+    window.location.href = "/"; // Redirect to the homepage ("/") when the button is clicked
   });
-  
-  document.getElementById("saveResultsBtn").addEventListener("click", function() {
+
+  document.getElementById("saveResultsBtn").addEventListener("click", function () {
     document.getElementById("saveResultsForm").submit(); // Submit the form when the button is clicked
   });
 </script>
