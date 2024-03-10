@@ -13,10 +13,22 @@
       <div class="w-full px-3">
         <div class="flex justify-between">
           <!-- Photo Function Should be Placed Here! -->
-          <div class="w-1/2 h-36 flex items-center justify-center cursor-pointer bg-blue-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 m-4">
-            <video id="video" width="320" height="240" autoplay></video>
-            <canvas id="canvas" width="320" height="240" class="hidden"></canvas>
-            <button id="snap" class="text-center cursor-pointer text-3xl">Take A Photo</button>
+          <!-- <div id="camera" class="w-1/2 h-36 flex items-center justify-center cursor-pointer bg-blue-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 m-4">
+            <label for="image" class="text-center cursor-pointer text-3xl">
+              Take A <br />
+              Photo
+            </label>
+            <input class="opacity-0 absolute h-32 cursor-pointer" type="file" id="image" name="image" accept="image/*" />
+          </div> -->
+
+          <!-- Photo Function Placed Here! -->
+          <!-- Photo Function Placed Here! -->
+          <div id="camera" class="w-1/2 h-36 flex items-center justify-center cursor-pointer bg-blue-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 m-4">
+            <label id="takePhoto" class="text-center cursor-pointer text-3xl" onclick="openWebcam()">
+              Take A <br />
+              Photo
+            </label>
+            <input type="hidden" type="file" id="uploadImage" name="uploadImage" accept="image/*" />
           </div>
 
           <!-- Upload Image Function -->
@@ -29,32 +41,6 @@
           </div>
         </div>
         <p class="text-gray-600 text-xs italic text-center">Take a Photo or Choose an Image to Submit a Picture</p>
-
-        <!-- Opens webcam function -->
-        <script>
-          // Get the video and canvas elements
-          var video = document.getElementById("video");
-          var canvas = document.getElementById("canvas");
-          var context = canvas.getContext("2d");
-
-          // Get access to the webcam
-          if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
-              // Set the video source to the webcam stream
-              video.srcObject = stream;
-              video.play();
-            });
-          }
-
-          // Add a click event listener to the snap button
-          document.getElementById("snap").addEventListener("click", function () {
-            // Draw the video frame to the canvas
-            context.drawImage(video, 0, 0, 320, 240);
-            // Hide the video element and show the canvas
-            video.classList.add("hidden");
-            canvas.classList.remove("hidden");
-          });
-        </script>
 
         <!-- Checkbox for Terms and Services Consent -->
         <div class="flex items-center justify-center mt-4">
@@ -78,6 +64,16 @@
     <a href="/results" class="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">View Past Results</a>
   </div>
 
+  <!-- Webcam Modal (Shows webcam modal when the "Take A Photo" button is clicked) -->
+  <div id="webcamModal" class="fixed inset-0 flex items-center justify-center z-10 hidden bg-black bg-opacity-40">
+    <div class="bg-white m-auto p-5 border border-gray-300 w-4/5">
+      <video id="video" class="w-full h-auto" autoplay></video>
+      <button id="snap" class="w-full py-2 mt-2 bg-blue-500 text-white rounded hover:bg-blue-700">Snap Photo</button>
+      <canvas id="canvas" class="w-full h-auto hidden"></canvas>
+      <button id="done" class="w-full py-2 mt-2 bg-green-500 text-white rounded hover:bg-green-700 hidden">Done</button>
+    </div>
+  </div>
+
   <script>
     function enableButtons() {
       var checkbox = document.getElementById("termsCheckbox");
@@ -91,29 +87,74 @@
       submitButton.disabled = !checkbox.checked;
       window.location.href = "#content";
     }
+
+    // Open Webcam Function
+    function openWebcam() {
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then(function (stream) {
+          var video = document.getElementById("video");
+          var canvas = document.getElementById("canvas");
+          var snapButton = document.getElementById("snap");
+          var modal = document.getElementById("webcamModal");
+
+          video.srcObject = stream;
+          video.play();
+
+          modal.style.display = "block";
+
+          // Close the webcam modal when the "Done" button is clicked
+          // Main Functionality
+          snapButton.addEventListener("click", function () {
+            // Adjust the size of the canvas to match the video stream
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            var context = canvas.getContext("2d");
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            video.style.display = "none";
+            canvas.style.display = "block";
+            snapButton.style.display = "none";
+            document.getElementById("done").style.display = "block";
+
+            // Convert the canvas image to a data URL
+            var imageData = canvas.toDataURL("image/png");
+
+            // Set the value of the hidden input field to the image data
+            document.getElementById("photo").value = imageData;
+          });
+
+          // Done button function
+          // Close the webcam modal when the "Done" button is clicked
+          document.getElementById("done").addEventListener("click", function () {
+            modal.style.display = "none";
+            video.style.display = "block";
+            canvas.style.display = "none";
+            snapButton.style.display = "block";
+            document.getElementById("done").style.display = "none";
+
+            // Get the image data from the hidden input field
+            var imageData = document.getElementById("photo").value;
+
+            // Send the image data to the server
+            fetch("your-server-url", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ image: imageData }),
+            })
+              .then((response) => response.json())
+              .then((data) => console.log(data))
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          });
+        })
+        .catch(function (err) {
+          console.error("Error accessing webcam:", err);
+        });
+    }
   </script>
 </div>
 {% endblock content %}
-
-<!-- Webcam function script -->
-<script>
-  // Get the video and canvas elements
-  var video = document.getElementById("video");
-  var canvas = document.getElementById("canvas");
-  var context = canvas.getContext("2d");
-
-  // Get access to the webcam
-  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
-      // Set the video source to the webcam stream
-      video.srcObject = stream;
-      video.play();
-    });
-  }
-
-  // Add a click event listener to the snap button
-  document.getElementById("snap").addEventListener("click", function () {
-    // Draw the video frame to the canvas
-    context.drawImage(video, 0, 0, 320, 240);
-  });
-</script>
