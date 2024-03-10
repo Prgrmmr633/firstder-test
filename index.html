@@ -1,12 +1,13 @@
-{% extends "base.html" %} 
-{% block title %}Index{% endblock %} 
-{% block content %}
+{% extends "base.html" %} {% block title %}Index{% endblock %} {% block content %}
 <div class="p-4 bg-white shadow-md rounded-lg">
-  <label class="block text-gray-700 text-4xl font-bold text-center pb-2" 
-  style="background-clip: text; -webkit-background-clip: text; color: transparent;
-  background-image: linear-gradient(to right, #2563eb, #2dd4bf);"> Dermafy Now </label>
+  <label
+    class="block text-gray-700 text-4xl font-bold text-center pb-2"
+    style="background-clip: text; -webkit-background-clip: text; color: transparent; background-image: linear-gradient(to right, #2563eb, #2dd4bf)"
+  >
+    Dermafy Now
+  </label>
   <label class="block text-gray-700 text-2xl text-center py-4"> Instructions </label>
-  <img src="{{ url_for('static', path='/asset/DermaInstruction.png') }}" alt="instructions" class="mx-auto h-72 rounded-lg">
+  <img src="{{ url_for('static', path='/asset/DermaInstruction.png') }}" alt="instructions" class="mx-auto h-72 rounded-lg" />
   <form class="w-full" method="post" enctype="multipart/form-data" action="/image">
     <div class="flex -mx-3 py-1">
       <div class="w-full px-3">
@@ -14,35 +15,25 @@
           <!-- Photo Function Should be Placed Here! -->
           <div class="w-1/2 h-36 flex items-center justify-center cursor-pointer bg-blue-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 m-4">
             <label for="image" class="text-center cursor-pointer text-3xl">
-              Take A <br> Photo
+              Take A <br />
+              Photo
             </label>
-            <input
-              class="opacity-0 absolute h-32 cursor-pointer"
-              type="file"
-              id="image"
-              name="image"
-              accept="image/*"
-            />
+            <input class="opacity-0 absolute h-32 cursor-pointer" type="file" id="image" name="image" accept="image/*" />
           </div>
-          
+
           <div class="w-1/2 h-36 flex items-center justify-center cursor-pointer bg-blue-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 m-4">
             <label for="uploadImage" class="text-center cursor-pointer text-3xl">
-              Upload <br> Image
+              Upload <br />
+              Image
             </label>
-            <input
-              class="opacity-0 absolute h-32 cursor-pointer"
-              type="file"
-              id="uploadImage"
-              name="uploadImage"
-              accept="image/*"
-            />
+            <input class="opacity-0 absolute h-32 cursor-pointer" type="file" id="uploadImage" name="uploadImage" accept="image/*" />
           </div>
         </div>
         <p class="text-gray-600 text-xs italic text-center">Take a Photo or Choose an Image to Submit a Picture</p>
 
         <!-- Checkbox for Terms and Services Consent -->
         <div class="flex items-center justify-center mt-4">
-          <input type="checkbox" id="termsCheckbox" onchange="enableButtons()">
+          <input type="checkbox" id="termsCheckbox" onchange="enableButtons()" />
           <label for="termsCheckbox" class="ml-2">
             Checking This Box Means You Consent to the <a class="text-blue-600 font-semibold" href="#">Terms</a> and <a class="text-blue-600 font-semibold" href="#">Services</a> of Autoderm.
           </label>
@@ -52,7 +43,9 @@
     <div class="md:flex md:items-center justify-center">
       <div class="">
         <!-- Disabled Submit Button Until Checkbox is Checked -->
-        <button class="shadow bg-blue-400 rounded-lg hover:bg-blue-600 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4" type="submit" name="submit" id="submitButton" disabled>Submit</button>
+        <button class="shadow bg-blue-400 rounded-lg hover:bg-blue-600 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4" type="submit" name="submit" id="submitButton" disabled>
+          Submit
+        </button>
       </div>
     </div>
   </form>
@@ -71,6 +64,7 @@
       // photoButton.disabled = !checkbox.checked;
       // uploadButton.disabled = !checkbox.checked;
       submitButton.disabled = !checkbox.checked;
+      window.location.href = "#content";
     }
   </script>
 </div>
