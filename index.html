@@ -65,14 +65,18 @@
   </div>
 
   <!-- Webcam Modal (Shows webcam modal when the "Take A Photo" button is clicked) -->
-  <div id="webcamModal" class="fixed inset-0 flex items-center justify-center z-10 hidden bg-black bg-opacity-40">
-    <div class="bg-white m-auto p-5 border border-gray-300 w-4/5">
-      <video id="video" class="w-full h-auto" autoplay></video>
-      <button id="snap" class="w-full py-2 mt-2 bg-blue-500 text-white rounded hover:bg-blue-700">Snap Photo</button>
-      <canvas id="canvas" class="w-full h-auto hidden"></canvas>
-      <button id="done" class="w-full py-2 mt-2 bg-green-500 text-white rounded hover:bg-green-700 hidden">Done</button>
+
+  <div id="webcamModal" class="fixed inset-0 items-center justify-center z-10 hidden bg-black bg-opacity-40">
+    <div class="flex items-center justify-center h-screen">
+      <div class="bg-white m-auto p-5 border border-gray-300 shadow-lg rounded-lg w-3/5">
+        <video id="video" class="my-4 mx-auto max-w-full shadow-lg rounded-lg max-h-full" autoplay></video>
+        <button id="snap" class="w-full py-2 mt-2 bg-blue-500 text-white rounded hover:bg-blue-700">Snap Photo</button>
+        <canvas id="canvas" class="my-4 mx-auto max-w-full shadow-lg rounded-lg max-h-full hidden"></canvas>
+        <button id="done" class="w-full py-2 mt-2 bg-green-500 text-white rounded hover:bg-green-700 hidden">Done</button>
+      </div>
     </div>
   </div>
+
 
   <script>
     function enableButtons() {

@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Form, UploadFile, Request, Response, status, HTTPException, Depends
 from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles  
+from fastapi.staticfiles import StaticFiles
 from pydantic import HttpUrl
 from typing import List, Optional
 from database import SessionLocal, engine
@@ -9,14 +9,25 @@ import uvicorn
 import requests
 import os
 import json
-from models import Prediction, UserInput  
+from models import Prediction, UserInput
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import func
 from datetime import datetime
 
-
 templates = Jinja2Templates(directory=".")
 app = FastAPI()
+
+# Define multiple API keys
+API_KEYS = ["5675fd21-7929-2597-6c8e-69e220ede9a2", "03e9fc01-f3a7-00a9-1d9a-191ac262ea91", "other_api_key_2"]
+current_api_key_index = 0
+
+def get_current_api_key():
+    global current_api_key_index
+    return API_KEYS[current_api_key_index]
+
+def rotate_api_key():
+    global current_api_key_index
+    current_api_key_index = (current_api_key_index + 1) % len(API_KEYS)
 
 def get_db():
     db = SessionLocal()
@@ -64,11 +75,21 @@ async def process(
     with open(image_path, "wb") as f:
         f.write(image_contents)
 
+    api_key = get_current_api_key()  # Get the current API key
     response = requests.post(
         "https://autoderm.ai/v1/query?model=autoderm_v2_2&language=en",
-        headers={"Api-Key": "5675fd21-7929-2597-6c8e-69e220ede9a2"},
+        headers={"Api-Key": api_key},
         files={"file": image_contents},
     )
+
+    if response.status_code == 429:  # API rate limit exceeded
+        rotate_api_key()  # Rotate to the next API key
+        api_key = get_current_api_key()  # Get the new current API key
+        response = requests.post(
+            "https://autoderm.ai/v1/query?model=autoderm_v2_2&language=en",
+            headers={"Api-Key": api_key},
+            files={"file": image_contents},
+        )
 
     try:
         data = response.json()
