@@ -12,23 +12,14 @@
     <div class="flex -mx-3 py-1">
       <div class="w-full px-3">
         <div class="flex justify-between">
-          <!-- Photo Function Should be Placed Here! -->
-          <!-- <div id="camera" class="w-1/2 h-36 flex items-center justify-center cursor-pointer bg-blue-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 m-4">
-            <label for="image" class="text-center cursor-pointer text-3xl">
-              Take A <br />
-              Photo
-            </label>
-            <input class="opacity-0 absolute h-32 cursor-pointer" type="file" id="image" name="image" accept="image/*" />
-          </div> -->
 
-          <!-- Photo Function Placed Here! -->
-          <!-- Photo Function Placed Here! -->
-          <div id="camera" class="w-1/2 h-36 flex items-center justify-center cursor-pointer bg-blue-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 m-4">
-            <label id="takePhoto" class="text-center cursor-pointer text-3xl" onclick="openWebcam()">
+          <!-- Take a Photo Function -->
+          <div id="camera" class="w-1/2 h-36 flex items-center justify-center cursor-pointer bg-blue-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 m-4" onclick="openWebcam()">
+            <label for="takePhoto" class="text-center cursor-pointer text-3xl">
               Take A <br />
               Photo
             </label>
-            <input type="hidden" type="file" id="uploadImage" name="uploadImage" accept="image/*" />
+            <input class="opacity-0 absolute h-32 cursor-pointer" type="hidden" type="file" id="takePhoto" name="image" accept="image/*" />
           </div>
 
           <!-- Upload Image Function -->
@@ -37,7 +28,7 @@
               Upload <br />
               Image
             </label>
-            <input class="opacity-0 absolute h-32 cursor-pointer" type="file" id="uploadImage" name="uploadImage" accept="image/*" />
+            <input class="opacity-0 absolute h-32 cursor-pointer" type="file" id="uploadImage" name="image" accept="image/*" />
           </div>
         </div>
         <p class="text-gray-600 text-xs italic text-center">Take a Photo or Choose an Image to Submit a Picture</p>
@@ -76,12 +67,11 @@
       </div>
     </div>
   </div>
-
-
+  
   <script>
     function enableButtons() {
       var checkbox = document.getElementById("termsCheckbox");
-      var photoButton = document.getElementById("image");
+      var photoButton = document.getElementById("takePhoto");
       var uploadButton = document.getElementById("uploadImage");
       var submitButton = document.getElementById("submitButton");
 
@@ -92,14 +82,17 @@
       window.location.href = "#content";
     }
 
-    // Open Webcam Function
-    function openWebcam() {
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-        .then(function (stream) {
+// Open Webcam Function
+function openWebcam() {
+  let imageData = null; // Variable to store the captured image data
+
+  navigator.mediaDevices
+      .getUserMedia({ video: true })
+      .then(function (stream) {
           var video = document.getElementById("video");
           var canvas = document.getElementById("canvas");
           var snapButton = document.getElementById("snap");
+          var doneButton = document.getElementById("done");
           var modal = document.getElementById("webcamModal");
 
           video.srcObject = stream;
@@ -108,57 +101,56 @@
           modal.style.display = "block";
 
           // Close the webcam modal when the "Done" button is clicked
-          // Main Functionality
-          snapButton.addEventListener("click", function () {
-            // Adjust the size of the canvas to match the video stream
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-
-            var context = canvas.getContext("2d");
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            video.style.display = "none";
-            canvas.style.display = "block";
-            snapButton.style.display = "none";
-            document.getElementById("done").style.display = "block";
-
-            // Convert the canvas image to a data URL
-            var imageData = canvas.toDataURL("image/png");
-
-            // Set the value of the hidden input field to the image data
-            document.getElementById("photo").value = imageData;
-          });
-
-          // Done button function
-          // Close the webcam modal when the "Done" button is clicked
-          document.getElementById("done").addEventListener("click", function () {
+          doneButton.addEventListener("click", function () {
+            if (imageData) { // Ensure there is captured image data
+                // Convert the canvas image to a Blob
+                canvas.toBlob(function (blob) {
+                    // Create a FormData object and append the blob with the filename
+                    var filename = `webcam_photo.png`;
+        
+                    // Create a FormData object and append the blob with the filename
+                    let formData = new FormData();
+                    formData.append('image', blob, filename); // Ensure 'image' field matches what the server expects
+        
+                    // Send the image data to the server
+                    fetch("/image", {
+                        method: "POST",
+                        body: formData,
+                    })
+                    .then(response => response.json())
+                    .then(data => console.log(data))
+                    .catch(error => console.error('Error:', error));
+                });
+            }
+        
             modal.style.display = "none";
             video.style.display = "block";
             canvas.style.display = "none";
             snapButton.style.display = "block";
-            document.getElementById("done").style.display = "none";
-
-            // Get the image data from the hidden input field
-            var imageData = document.getElementById("photo").value;
-
-            // Send the image data to the server
-            fetch("your-server-url", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ image: imageData }),
-            })
-              .then((response) => response.json())
-              .then((data) => console.log(data))
-              .catch((error) => {
-                console.error("Error:", error);
-              });
-          });
-        })
-        .catch(function (err) {
-          console.error("Error accessing webcam:", err);
+            doneButton.style.display = "none";
         });
-    }
+
+          // Take Photo button function
+          snapButton.addEventListener("click", function () {
+              // Adjust the size of the canvas to match the video stream
+              canvas.width = video.videoWidth;
+              canvas.height = video.videoHeight;
+
+              var context = canvas.getContext("2d");
+              context.drawImage(video, 0, 0, canvas.width, canvas.height);
+              video.style.display = "none";
+              canvas.style.display = "block";
+              snapButton.style.display = "none";
+              doneButton.style.display = "block";
+
+              // Convert the canvas image to a data URL
+              imageData = canvas.toDataURL("image/png");
+          });
+      })
+      .catch(function (err) {
+          console.error("Error accessing webcam:", err);
+      });
+}
   </script>
 </div>
 {% endblock content %}

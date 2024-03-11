@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Form, UploadFile, Request, Response, status, HTTPException, Depends
+from fastapi import FastAPI, Form, UploadFile, File, Request, Response, status, HTTPException, Depends
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import HttpUrl
@@ -13,6 +13,7 @@ from models import Prediction, UserInput
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import func
 from datetime import datetime
+import time
 
 templates = Jinja2Templates(directory=".")
 app = FastAPI()
@@ -69,40 +70,44 @@ async def process(
 
     image_contents = await image.read()
     image_filename = image.filename
-    image_path = f"static/{image_filename}"  
-    image_url = f"/{image_filename}" 
+    timestamp = int(time.time())  # Generate a timestamp
+    unique_filename = f"{timestamp}_{image_filename}"  # Unique filename
+    image_path = os.path.join("static", unique_filename)  # Path to save the image
+    image_url = f"/{unique_filename}"  # URL to access the saved image
 
-    with open(image_path, "wb") as f:
-        f.write(image_contents)
+    try:
+        # Save the image to the static directory
+        with open(image_path, "wb") as f:
+            f.write(image_contents)
 
-    api_key = get_current_api_key()  # Get the current API key
-    response = requests.post(
-        "https://autoderm.ai/v1/query?model=autoderm_v2_2&language=en",
-        headers={"Api-Key": api_key},
-        files={"file": image_contents},
-    )
-
-    if response.status_code == 429:  # API rate limit exceeded
-        rotate_api_key()  # Rotate to the next API key
-        api_key = get_current_api_key()  # Get the new current API key
+        # Call the Autoderm API
+        api_key = get_current_api_key()  # Get the current API key
         response = requests.post(
             "https://autoderm.ai/v1/query?model=autoderm_v2_2&language=en",
             headers={"Api-Key": api_key},
             files={"file": image_contents},
         )
 
-    try:
+        if response.status_code == 429:  # API rate limit exceeded
+            rotate_api_key()  # Rotate to the next API key
+            api_key = get_current_api_key()  # Get the new current API key
+            response = requests.post(
+                "https://autoderm.ai/v1/query?model=autoderm_v2_2&language=en",
+                headers={"Api-Key": api_key},
+                files={"file": image_contents},
+            )
+
         data = response.json()
-    except json.JSONDecodeError:
-        print("Warning: HTTP request returned empty or invalid JSON response")
-        data = {}
 
-    predictions = data.get("predictions", [])
-    confidence_scores = [prediction.get("confidence", 0) for prediction in predictions]
+        predictions = data.get("predictions", [])
+        confidence_scores = [prediction.get("confidence", 0) for prediction in predictions]
 
-    return templates.TemplateResponse(
-        "prediction.html", {"request": request, "image_url": image_url, "image_path": image_path, "predictions": predictions, "confidence_scores": confidence_scores}
-    )
+        return templates.TemplateResponse(
+            "prediction.html", {"request": request, "image_url": image_url, "predictions": predictions, "confidence_scores": confidence_scores}
+        )
+    except Exception as e:
+        # Handle any exceptions
+        return HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
 
 @app.post("/save_results")
 async def save_results(
