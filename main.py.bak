@@ -30,32 +30,6 @@ def rotate_api_key():
     global current_api_key_index
     current_api_key_index = (current_api_key_index + 1) % len(API_KEYS)
 
-# Function to save prediction data into the database
-def save_prediction_data(db: Session, image_url: str, predictions: list, confidence_scores: list):
-    # Implement logic to save prediction data into the database
-    pass
-
-# Function to get the latest prediction data from the database
-def get_latest_prediction_data(db: Session):
-    # Fetch the latest prediction data from the database by joining Prediction with UserInput
-    latest_prediction_data = db.query(UserInput.image, Prediction.name, Prediction.confidence_score, Prediction.read_more_url)\
-        .join(UserInput, UserInput.prediction_id == Prediction.id)\
-        .order_by(Prediction.date_added.desc()).first()
-
-    if latest_prediction_data:
-        # If prediction data is available, return it
-        return {
-            "image_url": latest_prediction_data.image,
-            "predictions": latest_prediction_data.name,
-            "confidence_scores": latest_prediction_data.confidence_score,
-            "read_more_urls": latest_prediction_data.read_more_url
-        }
-    else:
-        # If prediction data is not available, return None
-        return None
-
-
-
 def get_db():
     db = SessionLocal()
     try:
@@ -108,48 +82,32 @@ async def process(
 
         # Call the Autoderm API
         api_key = get_current_api_key()  # Get the current API key
-        response_from_autoderm = requests.post(
+        response = requests.post(
             "https://autoderm.ai/v1/query?model=autoderm_v2_2&language=en",
             headers={"Api-Key": api_key},
             files={"file": image_contents},
         )
 
-        if response_from_autoderm.status_code == 429:  # API rate limit exceeded
+        if response.status_code == 429:  # API rate limit exceeded
             rotate_api_key()  # Rotate to the next API key
             api_key = get_current_api_key()  # Get the new current API key
-            response_from_autoderm = requests.post(
+            response = requests.post(
                 "https://autoderm.ai/v1/query?model=autoderm_v2_2&language=en",
                 headers={"Api-Key": api_key},
                 files={"file": image_contents},
             )
 
-        data = response_from_autoderm.json()
+        data = response.json()
+
         predictions = data.get("predictions", [])
         confidence_scores = [prediction.get("confidence", 0) for prediction in predictions]
-        
-        save_prediction_data(db, image_path, predictions, confidence_scores)
 
         return templates.TemplateResponse(
             "prediction.html", {"request": request, "image_url": image_url, "predictions": predictions, "confidence_scores": confidence_scores}
         )
     except Exception as e:
         # Handle any exceptions
-        raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
-
-# GET endpoint to retrieve prediction data of the latest image
-@app.get("/predictionData")
-async def get_latest_prediction_data_endpoint(
-    request: Request,
-    db: Session = Depends(get_db)
-):
-    # Fetch the latest prediction data from the database
-    latest_prediction_data = get_latest_prediction_data(db)
-    if latest_prediction_data:
-        # If prediction data is available, return it
-        return latest_prediction_data
-    else:
-        # If prediction data is not available, return 404 Not Found
-        raise HTTPException(status_code=404, detail="Prediction data not found")
+        return HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
 
 @app.post("/save_results")
 async def save_results(
@@ -207,26 +165,6 @@ async def view_result(request: Request, result_id: int, prediction_date: str, db
     )
 
     return templates.TemplateResponse("results_details.html", {"request": request, "result": result, "predictions": predictions, "prediction_date": prediction_date})
-
-# Add the /webphoto endpoint to save images to the cache folder
-@app.post("/webphoto")
-async def webphoto(image: UploadFile = File(...)):
-    # Ensure that the file is an image
-    if not image.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
-        raise HTTPException(status_code=400, detail="Only PNG, JPG, and JPEG files are allowed.")
-
-    # Read the image contents
-    image_contents = await image.read()
-
-    try:
-        # Save the image to the cache folder
-        filename = os.path.join("cache", image.filename)
-        with open(filename, "wb") as f:
-            f.write(image_contents)
-        
-        return {"message": "Image saved successfully", "filename": filename}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to save the image: {str(e)}")
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="localhost", port=3100, reload=False)
