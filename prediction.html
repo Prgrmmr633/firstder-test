@@ -89,14 +89,44 @@
       Submit Another Image
     </button>
   </div>
+  <div id="saveMessage" class="hidden text-center text-blue-500 font-bold text-2xl mt-8">Results are saved!</div>
 </div>
+
 <script>
-  document.getElementById("submitAnotherBtn").addEventListener("click", function() {
-    window.location.href = "/";  // Redirect to the homepage ("/") when the button is clicked
+  // Redirect to the content section of the page when the page loads
+  window.onload = function () {
+    window.location.href = "#content";
+  };
+
+  document.getElementById("submitAnotherBtn").addEventListener("click", function () {
+    window.location.href = "/"; // Redirect to the homepage ("/") when the button is clicked
   });
-  
-  document.getElementById("saveResultsBtn").addEventListener("click", function() {
-    document.getElementById("saveResultsForm").submit(); // Submit the form when the button is clicked
+
+  // document.getElementById("saveResultsBtn").addEventListener("click", function () {
+  //   document.getElementById("saveResultsForm").submit(); // Submit the form when the button is clicked
+  // });
+
+  // Use fetch to submit the form data using JavaScript (Shows reults are saved message on the page without refreshing the page)
+  document.getElementById("saveResultsBtn").addEventListener("click", function (event) {
+    event.preventDefault(); // Prevent the form from being submitted the default way
+
+    var form = document.getElementById("saveResultsForm");
+    var formData = new FormData(form);
+
+    fetch(form.action, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Display the JSON response in the console or somewhere on the page
+        console.log(data);
+        // Show the save message
+        document.getElementById("saveMessage").style.display = "block";
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   });
 </script>
 {% endblock %}
