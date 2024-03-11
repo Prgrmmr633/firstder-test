@@ -3,7 +3,7 @@ python-multipart
 uvicorn
 Jinja2
 requests
-Flask
+# Flask
 SQLAlchemy
 psycopg2-binary
-aiofiles
+# aiofiles
