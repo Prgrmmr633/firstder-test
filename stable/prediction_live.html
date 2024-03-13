@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Predictions{% endblock %}
+{% block content %}
+<div class="w-2/3 mx-auto">
+  <label class="block text-gray-700 text-4xl font-bold text-center pb-2" style="background-clip: text; -webkit-background-clip: text; color: transparent;
+  background-image: linear-gradient(to right, #2563eb, #2dd4bf)">Your Image</label>
+  <img src="{{ url_for('static', path=image_url) }}" alt="Uploaded Image" class="my-4 mx-auto max-w-full shadow-md rounded-lg" style="height: 25vh;">
+  <div class="bg-gray-800 shadow-md rounded-lg py-2">
+    <table class="text-left w-full border-collapse">
+      <thead class="bg-gray-800">
+        <tr class="">
+          <th class="py-4 px-6 font-bold uppercase text-center text-sm text-white border-b">Prediction</th>
+          <th class="py-4 px-6 font-bold uppercase text-center text-sm text-white border-b">Confidence Score</th>
+          <th class="py-4 px-6 font-bold uppercase text-center text-sm text-white border-b">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white text-center">
+        {% for i in range(predictions|length) %}
+        <tr class="hover:bg-gray-50">
+          <td class="py-4 px-6 border-b border-gray-200 justify-between">{{ predictions[i]["name"] }}</td>
+          <td class="py-4 px-6 border-b border-gray-200 justify-between">{{ (confidence_scores[i] * 100)|float|round(1) }}%</td>
+          <td class="flex justify-center lg:block py-4 px-6 border-b border-gray-200">
+            <div class="flex justify-center">
+              <a href="{{ predictions[i]['readMoreUrl'] }}" class="text-white font-bold py-1 px-3 rounded text-xs bg-green-500 hover:bg-green-700">Learn More</a>
+              <input type="hidden" name="read_more_urls" value="{{ predictions[i]['readMoreUrl'] }}" />
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="flex justify-center mt-4">
+    <button id="saveResultsBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Save Results</button>
+    <button id="submitAnotherBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2">Submit Another Image</button>
+  </div>
+<form id="saveResultsForm" action="/save_results" method="post">
+  <!-- Removed style="display: none;" -->
+  <input type="hidden" name="image_path" value="{{ image_url }}" />
+  {% for i in range(predictions|length) %}
+  <input type="hidden" name="predictions" value="{{ predictions[i]['name'] }}" />
+  <input type="hidden" name="confidence_scores" value="{{ confidence_scores[i] }}" />
+  <input type="hidden" name="read_more_urls" value="{{ predictions[i]['readMoreUrl'] }}" />
+  {% endfor %}
+</form>
+<script>
+  // Redirect to the content section of the page when the page loads
+  window.onload = function () {
+    if (performance.navigation.type === 1) {
+      window.location.href = "/#content";
+    } else {
+      window.location.href = "#content";
+    }
+  };
+
+  document.getElementById("submitAnotherBtn").addEventListener("click", function () {
+    window.location.href = "/"; // Redirect to the homepage ("/") when the button is clicked
+  });
+
+  // document.getElementById("saveResultsBtn").addEventListener("click", function () {
+  //   document.getElementById("saveResultsForm").submit(); // Submit the form when the button is clicked
+  // });
+
+  // Use fetch to submit the form data using JavaScript (Shows reults are saved message on the page without refreshing the page)
+  document.getElementById("saveResultsBtn").addEventListener("click", function (event) {
+    event.preventDefault(); // Prevent the form from being submitted the default way
+
+    var form = document.getElementById("saveResultsForm");
+    var formData = new FormData(form);
+
+    fetch(form.action, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Display the JSON response in the console or somewhere on the page
+        console.log(data);
+        // Show the save message
+        document.getElementById("saveMessage").style.display = "block";
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  });
+</script>
+{% endblock %}

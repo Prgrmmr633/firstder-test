@@ -7,7 +7,7 @@
   <img src="{{ url_for('static', path=image_url) }}" alt="Uploaded Image" class="my-4 mx-auto max-w-full shadow-md rounded-lg" style="height: 25vh;">
   <div class="bg-gray-800 shadow-md rounded-lg py-2">
     <table class="text-left w-full border-collapse">
-      <thead class="bg-gray-800">
+      <thead class=" bg-gray-800">
         <tr class="">
           <th class="py-4 px-6 font-bold uppercase text-center text-sm text-white border-b">Prediction</th>
           <th class="py-4 px-6 font-bold uppercase text-center text-sm text-white border-b">Confidence Score</th>
@@ -63,7 +63,7 @@
       </tbody>
     </table>
   </div>
-  <div class="flex justify-center mt-4">
+  <div class="flex justify-center  mt-4">
     <form id="saveResultsForm" action="/save_results" method="post">
       <input type="hidden" name="image_path" value="{{ image_url }}">
       <input type="hidden" name="predictions" value="Mole">
@@ -85,7 +85,9 @@
         Save Results
       </button>
     </form>
-    <button id="submitAnotherBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2">Submit Another Image</button>
+    <button id="submitAnotherBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2">
+      Submit Another Image
+    </button>
   </div>
   <div id="saveMessage" class="hidden text-center text-blue-500 font-bold text-2xl mt-8">Results are saved!</div>
 </div>

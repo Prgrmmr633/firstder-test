@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" /> -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" >
+    <title>{% block title %}{% endblock %} - Dermafy</title>
+    <meta name="description" content="Dermatology AI made easy" />
+    <meta name="author" content="BuMacMal" />
+  </head>
+
+  <body>
+    <div id="navbar">{% include 'navbar.html' %}</div>
+    <div id="hero">{% include 'hero.html' %}</div>
+    <div id="about">{% include 'about.html' %}</div>
+    <div id="content" class="flex justify-center items-center min-h-screen">{% block content %}{% endblock %}</div>
+    <div id="footer">{% include 'footer.html' %}</div>
+  </body>
+</html>
