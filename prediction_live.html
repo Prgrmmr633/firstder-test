@@ -1,11 +1,10 @@
-{% extends "base.html" %} {% block title %}Predictions{% endblock %} {% block content %}
+{% extends "base.html" %}
+{% block title %}Predictions{% endblock %}
+{% block content %}
 <div class="w-2/3 mx-auto">
-  <label
-    class="block text-gray-700 text-4xl font-bold text-center pb-2"
-    style="background-clip: text; -webkit-background-clip: text; color: transparent; background-image: linear-gradient(to right, #2563eb, #2dd4bf)"
-    >Your Image</label
-  >
-  <img src="{{ url_for('static', path=image_url) }}" alt="Uploaded Image" class="my-4 mx-auto max-w-full shadow-md rounded-lg" style="height: 25vh" />
+  <label class="block text-gray-700 text-4xl font-bold text-center pb-2" style="background-clip: text; -webkit-background-clip: text; color: transparent;
+  background-image: linear-gradient(to right, #2563eb, #2dd4bf)">Your Image</label>
+  <img src="{{ url_for('static', path=image_url) }}" alt="Uploaded Image" class="my-4 mx-auto max-w-full shadow-md rounded-lg" style="height: 25vh;">
   <div class="bg-gray-800 shadow-md rounded-lg py-2">
     <table class="text-left w-full border-collapse">
       <thead class="bg-gray-800">
@@ -15,7 +14,7 @@
           <th class="py-4 px-6 font-bold uppercase text-center text-sm text-white border-b">Actions</th>
         </tr>
       </thead>
-      <tbody class="bg-white">
+      <tbody class="bg-white text-center">
         {% for i in range(predictions|length) %}
         <tr class="hover:bg-gray-50">
           <td class="py-4 px-6 border-b border-gray-200 justify-between">{{ predictions[i]["name"] }}</td>
@@ -35,8 +34,6 @@
     <button id="saveResultsBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Save Results</button>
     <button id="submitAnotherBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2">Submit Another Image</button>
   </div>
-  <button id="submitAnotherBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2">Submit Another Image</button>
-</div>
 <form id="saveResultsForm" action="/save_results" method="post">
   <!-- Removed style="display: none;" -->
   <input type="hidden" name="image_path" value="{{ image_url }}" />
@@ -49,7 +46,11 @@
 <script>
   // Redirect to the content section of the page when the page loads
   window.onload = function () {
-    window.location.href = "#content";
+    if (performance.navigation.type === 1) {
+      window.location.href = "/#content";
+    } else {
+      window.location.href = "#content";
+    }
   };
 
   document.getElementById("submitAnotherBtn").addEventListener("click", function () {
