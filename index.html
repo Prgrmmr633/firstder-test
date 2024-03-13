@@ -1,156 +1,223 @@
-{% extends "base.html" %} {% block title %}Index{% endblock %} {% block content %}
-<div class="p-4 bg-white shadow-md rounded-lg">
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block content %}
+<div class="p-4 w-1/3 bg-white shadow-md rounded-lg">
   <label
     class="block text-gray-700 text-4xl font-bold text-center pb-2"
     style="background-clip: text; -webkit-background-clip: text; color: transparent; background-image: linear-gradient(to right, #2563eb, #2dd4bf)"
   >
     Dermafy Now
   </label>
-  <label class="block text-gray-700 text-2xl text-center py-4"> Instructions </label>
+  <label class="block text-gray-700 text-2xl text-center py-4">Instructions</label>
   <img src="{{ url_for('static', path='/asset/DermaInstruction.png') }}" alt="instructions" class="mx-auto h-72 rounded-lg" />
-  <form class="w-full" method="post" enctype="multipart/form-data" action="/image">
-    <div class="flex -mx-3 py-1">
-      <div class="w-full px-3">
-        <div class="flex justify-between">
 
-          <!-- Take a Photo Function -->
-          <div id="camera" class="w-1/2 h-36 flex items-center justify-center cursor-pointer bg-blue-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 m-4" onclick="openWebcam()">
-            <label for="takePhoto" class="text-center cursor-pointer text-3xl">
-              Take A <br />
-              Photo
-            </label>
-            <input class="opacity-0 absolute h-32 cursor-pointer" type="hidden" type="file" id="takePhoto" name="image" accept="image/*" />
-          </div>
-
-          <!-- Upload Image Function -->
-          <div class="w-1/2 h-36 flex items-center justify-center cursor-pointer bg-blue-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 m-4">
-            <label for="uploadImage" class="text-center cursor-pointer text-3xl">
-              Upload <br />
-              Image
-            </label>
-            <input class="opacity-0 absolute h-32 cursor-pointer" type="file" id="uploadImage" name="image" accept="image/*" />
-          </div>
-        </div>
-        <p class="text-gray-600 text-xs italic text-center">Take a Photo or Choose an Image to Submit a Picture</p>
-
-        <!-- Checkbox for Terms and Services Consent -->
-        <div class="flex items-center justify-center mt-4">
-          <input type="checkbox" id="termsCheckbox" onchange="enableButtons()" />
-          <label for="termsCheckbox" class="ml-2">
-            Checking This Box Means You Consent to the <a class="text-blue-600 font-semibold" href="#">Terms</a> and <a class="text-blue-600 font-semibold" href="#">Services</a> of Autoderm.
-          </label>
+  <!-- Take a Photo Button -->
+  <div class="flex justify-center py-4">
+    <button id="takePhoto" class="w-1/2 h-20 bg-blue-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 m-2 mb-0 text-3xl" onclick="openWebcam()" disabled>
+      Take A Photo
+    </button>
+    <!-- Webcam Modal (Shows webcam modal when the "Take A Photo" button is clicked) -->
+    <div id="webcamModal" class="fixed inset-0 items-center justify-center z-10 hidden bg-black bg-opacity-40">
+      <div class="flex items-center justify-center h-screen">
+        <div class="bg-white m-auto p-5 border border-gray-300 shadow-lg rounded-lg w-3/5 relative">
+          <video id="video" class="my-4 mx-auto max-w-full shadow-lg rounded-lg max-h-full" autoplay></video>
+          <button class="absolute top-0 right-0 m-2 text-xl" onclick="closeWebcamModal()">
+            <div class="close-button w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
+              <span class="text-white">&times;</span>
+            </div>
+          </button>
+          <button id="snap" class="w-full py-2 mt-2 bg-blue-500 text-white rounded hover:bg-blue-700">Snap Photo</button>
+          <canvas id="canvas" class="my-4 mx-auto max-w-full shadow-lg rounded-lg max-h-full hidden"></canvas>
+          <button id="done" class="w-full py-2 mt-2 bg-green-500 text-white rounded hover:bg-green-700 hidden">Submit</button>
+          <button id="retake" class="w-full py-2 mt-2 bg-blue-500 text-white rounded hover:bg-blue-700 hidden">Retake</button>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Upload Image Form -->
+  <form id="uploadForm" class="w-full" method="post" enctype="multipart/form-data" action="/image">
+    <div class="flex justify-center">
+      <div class="w-1/2 h-20 flex items-center justify-center cursor-pointer bg-blue-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 m-2">
+        <label for="uploadImage" class="text-center cursor-pointer text-3xl">
+          Upload Image
+        </label>
+        <input class="opacity-0 absolute h-32 cursor-pointer" type="file" id="uploadImage" name="image" accept="image/*" onchange="showSubmitButton()" disabled />
+      </div>
+    </div>
+
     <div class="md:flex md:items-center justify-center">
-      <div class="">
+      <div id="submitButtonContainer" class="hidden">
         <!-- Disabled Submit Button Until Checkbox is Checked -->
-        <button class="shadow bg-blue-400 rounded-lg hover:bg-blue-600 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4" type="submit" name="submit" id="submitButton" disabled>
+        <button id="submitButton" class="shadow bg-green-500 hover:bg-green-700 rounded-lg focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 m-2" type="submit" name="submit" disabled>
           Submit
         </button>
       </div>
     </div>
+
+    <p class="text-gray-600 text-xs italic text-center">Take a Photo or Choose an Image to Submit a Picture</p>
   </form>
+
+  <!-- Checkbox for Terms and Services Consent -->
+  <div class="flex items-center justify-center mt-4">
+    <input type="checkbox" id="termsCheckbox" onchange="enableButtons()" />
+    <label id="termsLabel" for="termsCheckbox" class="ml-2 text-red-600">
+      You must consent to have your image be taken first before using the app.
+    </label>
+  </div>
+
   <div class="mt-4 text-center">
-    <a href="/results" class="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">View Past Results</a>
+    <a href="/results/#content" class="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">View Past Results</a>
   </div>
 
-  <!-- Webcam Modal (Shows webcam modal when the "Take A Photo" button is clicked) -->
-
-  <div id="webcamModal" class="fixed inset-0 items-center justify-center z-10 hidden bg-black bg-opacity-40">
-    <div class="flex items-center justify-center h-screen">
-      <div class="bg-white m-auto p-5 border border-gray-300 shadow-lg rounded-lg w-3/5">
-        <video id="video" class="my-4 mx-auto max-w-full shadow-lg rounded-lg max-h-full" autoplay></video>
-        <button id="snap" class="w-full py-2 mt-2 bg-blue-500 text-white rounded hover:bg-blue-700">Snap Photo</button>
-        <canvas id="canvas" class="my-4 mx-auto max-w-full shadow-lg rounded-lg max-h-full hidden"></canvas>
-        <button id="done" class="w-full py-2 mt-2 bg-green-500 text-white rounded hover:bg-green-700 hidden">Done</button>
-      </div>
-    </div>
-  </div>
-  
   <script>
-    function enableButtons() {
-      var checkbox = document.getElementById("termsCheckbox");
-      var photoButton = document.getElementById("takePhoto");
-      var uploadButton = document.getElementById("uploadImage");
-      var submitButton = document.getElementById("submitButton");
-
-      // Enable/disable buttons based on checkbox state
-      // photoButton.disabled = !checkbox.checked;
-      // uploadButton.disabled = !checkbox.checked;
-      submitButton.disabled = !checkbox.checked;
-      window.location.href = "#content";
-    }
-
-// Open Webcam Function
-function openWebcam() {
-  let imageData = null; // Variable to store the captured image data
-
-  navigator.mediaDevices
-      .getUserMedia({ video: true })
-      .then(function (stream) {
+    // Function to enable webcam and display modal
+    function enableWebcam() {
+      let imageData = null;
+  
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function (stream) {
           var video = document.getElementById("video");
           var canvas = document.getElementById("canvas");
           var snapButton = document.getElementById("snap");
           var doneButton = document.getElementById("done");
+          var retakeButton = document.getElementById("retake");
           var modal = document.getElementById("webcamModal");
-
+  
           video.srcObject = stream;
           video.play();
-
+  
           modal.style.display = "block";
-
-          // Close the webcam modal when the "Done" button is clicked
+  
           doneButton.addEventListener("click", function () {
-            if (imageData) { // Ensure there is captured image data
-                // Convert the canvas image to a Blob
-                canvas.toBlob(function (blob) {
-                    // Create a FormData object and append the blob with the filename
-                    var filename = `webcam_photo.png`;
-        
-                    // Create a FormData object and append the blob with the filename
-                    let formData = new FormData();
-                    formData.append('image', blob, filename); // Ensure 'image' field matches what the server expects
-        
-                    // Send the image data to the server
-                    fetch("/image", {
-                        method: "POST",
-                        body: formData,
-                    })
-                    .then(response => response.json())
-                    .then(data => console.log(data))
-                    .catch(error => console.error('Error:', error));
-                });
+            if (imageData) {
+              canvas.toBlob(function (blob) {
+                var filename = `webcam_photo.png`;
+                let formData = new FormData();
+                formData.append('image', blob, filename);
+  
+                fetch("/image", {
+                    method: "POST",
+                    body: formData,
+                  })
+                  .then(response => {
+                    return response.text();
+                  })
+                  .then(data => {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = data;
+  
+                    const contentElement = tempDiv.querySelector('#content');
+                    const footerElement = tempDiv.querySelector('#footer');
+  
+                    if (contentElement) {
+                      document.getElementById("content").outerHTML = contentElement.outerHTML;
+                      window.location.href = "#content";
+                    } else {
+                      console.error("Content element not found in the received HTML.");
+                    }
+  
+                    document.getElementById("submitAnotherBtn").addEventListener("click", function () {
+                      window.location.href = "/";
+                    });
+                  })
+                  .catch(error => console.error('Error:', error));
+              });
             }
-        
+  
             modal.style.display = "none";
             video.style.display = "block";
             canvas.style.display = "none";
             snapButton.style.display = "block";
             doneButton.style.display = "none";
-        });
-
-          // Take Photo button function
-          snapButton.addEventListener("click", function () {
-              // Adjust the size of the canvas to match the video stream
-              canvas.width = video.videoWidth;
-              canvas.height = video.videoHeight;
-
-              var context = canvas.getContext("2d");
-              context.drawImage(video, 0, 0, canvas.width, canvas.height);
-              video.style.display = "none";
-              canvas.style.display = "block";
-              snapButton.style.display = "none";
-              doneButton.style.display = "block";
-
-              // Convert the canvas image to a data URL
-              imageData = canvas.toDataURL("image/png");
+            retakeButton.style.display = "none"; // Hide retake button after capturing image
           });
-      })
-      .catch(function (err) {
+  
+          snapButton.addEventListener("click", function () {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+  
+            var context = canvas.getContext("2d");
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            video.style.display = "none";
+            canvas.style.display = "block";
+            snapButton.style.display = "none";
+            doneButton.style.display = "block";
+            retakeButton.style.display = "block"; // Show retake button after capturing image
+  
+            imageData = canvas.toDataURL("image/png");
+          });
+  
+          // Retake button functionality
+          retakeButton.addEventListener("click", function () {
+            video.style.display = "block";
+            canvas.style.display = "none";
+            snapButton.style.display = "block";
+            doneButton.style.display = "none";
+            retakeButton.style.display = "none";
+            imageData = null; // Reset imageData when retaking the photo
+          });
+        })
+        .catch(function (err) {
           console.error("Error accessing webcam:", err);
-      });
-}
-  </script>
+        });
+    }
+  
+    // Event listener for "Take a Photo" button
+    document.getElementById("takePhoto").addEventListener("click", function () {
+      if (!isCheckboxChecked()) {
+        return;
+      }
+      enableWebcam(); // Call the function to enable webcam and display modal
+    });
+  
+    // Function to check if checkbox is checked
+    function isCheckboxChecked() {
+      var checkbox = document.getElementById("termsCheckbox");
+      return checkbox.checked;
+    }
+  
+    // Function to enable buttons
+    function enableButtons() {
+      var checkbox = document.getElementById("termsCheckbox");
+      var photoButton = document.getElementById("takePhoto");
+      var uploadButton = document.getElementById("uploadImage");
+      var submitButton = document.getElementById("submitButton");
+      var termsLabel = document.getElementById("termsLabel");
+  
+      if (checkbox.checked) {
+        photoButton.disabled = false;
+        uploadButton.disabled = false;
+        submitButton.disabled = false;
+        termsLabel.textContent = "You have consented to having your image taken.";
+        termsLabel.style.color = "green";
+      } else {
+        photoButton.disabled = true;
+        uploadButton.disabled = true;
+        submitButton.disabled = true;
+        termsLabel.textContent = "You must consent to have your image be taken first before using the app.";
+        termsLabel.style.color = "red";
+      }
+    }
+  
+    // Function to show submit button when an image is selected
+    function showSubmitButton() {
+      var uploadInput = document.getElementById("uploadImage");
+      var submitButtonContainer = document.getElementById("submitButtonContainer");
+  
+      if (uploadInput.files.length > 0) {
+        submitButtonContainer.classList.remove("hidden");
+      } else {
+        submitButtonContainer.classList.add("hidden");
+      }
+    }
+  
+    // Function to close webcam modal
+    function closeWebcamModal() {
+      var modal = document.getElementById("webcamModal");
+      modal.style.display = "none";
+      window.location.href = "#content";
+    }
+  </script>  
 </div>
 {% endblock content %}
