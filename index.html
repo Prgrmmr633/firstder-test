@@ -1,6 +1,4 @@
-{% extends "base.html" %}
-{% block title %}Index{% endblock %}
-{% block content %}
+{% extends "base.html" %} {% block title %}Index{% endblock %} {% block content %}
 <div class="p-4 w-1/3 bg-white shadow-md rounded-lg">
   <label
     class="block text-gray-700 text-4xl font-bold text-center pb-2"
@@ -13,9 +11,7 @@
 
   <!-- Take a Photo Button -->
   <div class="flex justify-center py-4">
-    <button id="takePhoto" class="w-1/2 h-20 bg-blue-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 m-2 mb-0 text-3xl" onclick="openWebcam()" disabled>
-      Take A Photo
-    </button>
+    <button id="takePhoto" class="w-1/2 h-20 bg-blue-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 m-2 mb-0 text-3xl" onclick="openWebcam()" disabled>Take A Photo</button>
     <!-- Webcam Modal (Shows webcam modal when the "Take A Photo" button is clicked) -->
     <div id="webcamModal" class="fixed inset-0 items-center justify-center z-10 hidden bg-black bg-opacity-40">
       <div class="flex items-center justify-center h-screen">
@@ -39,9 +35,7 @@
   <form id="uploadForm" class="w-full" method="post" enctype="multipart/form-data" action="/image">
     <div class="flex justify-center">
       <div class="w-1/2 h-20 flex items-center justify-center cursor-pointer bg-blue-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 m-2">
-        <label for="uploadImage" class="text-center cursor-pointer text-3xl">
-          Upload Image
-        </label>
+        <label for="uploadImage" class="text-center cursor-pointer text-3xl"> Upload Image </label>
         <input class="opacity-0 absolute h-32 cursor-pointer" type="file" id="uploadImage" name="image" accept="image/*" onchange="showSubmitButton()" disabled />
       </div>
     </div>
@@ -49,7 +43,13 @@
     <div class="md:flex md:items-center justify-center">
       <div id="submitButtonContainer" class="hidden">
         <!-- Disabled Submit Button Until Checkbox is Checked -->
-        <button id="submitButton" class="shadow bg-green-500 hover:bg-green-700 rounded-lg focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 m-2" type="submit" name="submit" disabled>
+        <button
+          id="submitButton"
+          class="shadow bg-green-500 hover:bg-green-700 rounded-lg focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 m-2"
+          type="submit"
+          name="submit"
+          disabled
+        >
           Submit
         </button>
       </div>
@@ -61,9 +61,7 @@
   <!-- Checkbox for Terms and Services Consent -->
   <div class="flex items-center justify-center mt-4">
     <input type="checkbox" id="termsCheckbox" onchange="enableButtons()" />
-    <label id="termsLabel" for="termsCheckbox" class="ml-2 text-red-600">
-      You must consent to have your image be taken first before using the app.
-    </label>
+    <label id="termsLabel" for="termsCheckbox" class="ml-2 text-red-600"> You must consent to have your image be taken first before using the app. </label>
   </div>
 
   <div class="mt-4 text-center">
@@ -74,8 +72,9 @@
     // Function to enable webcam and display modal
     function enableWebcam() {
       let imageData = null;
-  
-      navigator.mediaDevices.getUserMedia({ video: true })
+
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
         .then(function (stream) {
           var video = document.getElementById("video");
           var canvas = document.getElementById("canvas");
@@ -83,48 +82,70 @@
           var doneButton = document.getElementById("done");
           var retakeButton = document.getElementById("retake");
           var modal = document.getElementById("webcamModal");
-  
+
           video.srcObject = stream;
           video.play();
-  
+
           modal.style.display = "block";
-  
+
           doneButton.addEventListener("click", function () {
             if (imageData) {
               canvas.toBlob(function (blob) {
                 var filename = `webcam_photo.png`;
                 let formData = new FormData();
-                formData.append('image', blob, filename);
-  
+                formData.append("image", blob, filename);
+
                 fetch("/image", {
-                    method: "POST",
-                    body: formData,
-                  })
-                  .then(response => {
+                  method: "POST",
+                  body: formData,
+                })
+                  .then((response) => {
                     return response.text();
                   })
-                  .then(data => {
-                    const tempDiv = document.createElement('div');
+                  .then((data) => {
+                    const tempDiv = document.createElement("div");
                     tempDiv.innerHTML = data;
-  
-                    const contentElement = tempDiv.querySelector('#content');
-                    const footerElement = tempDiv.querySelector('#footer');
-  
+
+                    const contentElement = tempDiv.querySelector("#content");
+                    const footerElement = tempDiv.querySelector("#footer");
+
                     if (contentElement) {
                       document.getElementById("content").outerHTML = contentElement.outerHTML;
                       window.location.href = "#content";
                     } else {
                       console.error("Content element not found in the received HTML.");
                     }
-  
+                    // Redirect to the content section of the page when the page loads
                     document.getElementById("submitAnotherBtn").addEventListener("click", function () {
                       window.location.href = "/";
                     });
+                    // Use fetch to submit the form data using JavaScript (Shows reults are saved message on the page without refreshing the page)
+                    document.getElementById("saveResultsBtn").addEventListener("click", function (event) {
+                      event.preventDefault(); // Prevent the form from being submitted the default way
+
+                      var form = document.getElementById("saveResultsForm");
+                      var formData = new FormData(form);
+
+                      fetch(form.action, {
+                        method: "POST",
+                        body: formData,
+                      })
+                        .then((response) => response.json())
+                        .then((data) => {
+                          // Display the JSON response in the console or somewhere on the page
+                          console.log(data);
+                          // Show the save message
+                          document.getElementById("saveMessage").style.display = "block";
+                        })
+                        .catch((error) => {
+                          console.error("Error:", error);
+                        });
+                    });
                   })
-                  .catch(error => console.error('Error:', error));
+                  .catch((error) => console.error("Error:", error));
               });
             }
-  
+
             modal.style.display = "none";
             video.style.display = "block";
             canvas.style.display = "none";
@@ -132,11 +153,11 @@
             doneButton.style.display = "none";
             retakeButton.style.display = "none"; // Hide retake button after capturing image
           });
-  
+
           snapButton.addEventListener("click", function () {
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
-  
+
             var context = canvas.getContext("2d");
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
             video.style.display = "none";
@@ -144,10 +165,10 @@
             snapButton.style.display = "none";
             doneButton.style.display = "block";
             retakeButton.style.display = "block"; // Show retake button after capturing image
-  
+
             imageData = canvas.toDataURL("image/png");
           });
-  
+
           // Retake button functionality
           retakeButton.addEventListener("click", function () {
             video.style.display = "block";
@@ -162,7 +183,7 @@
           console.error("Error accessing webcam:", err);
         });
     }
-  
+
     // Event listener for "Take a Photo" button
     document.getElementById("takePhoto").addEventListener("click", function () {
       if (!isCheckboxChecked()) {
@@ -170,13 +191,13 @@
       }
       enableWebcam(); // Call the function to enable webcam and display modal
     });
-  
+
     // Function to check if checkbox is checked
     function isCheckboxChecked() {
       var checkbox = document.getElementById("termsCheckbox");
       return checkbox.checked;
     }
-  
+
     // Function to enable buttons
     function enableButtons() {
       var checkbox = document.getElementById("termsCheckbox");
@@ -184,7 +205,7 @@
       var uploadButton = document.getElementById("uploadImage");
       var submitButton = document.getElementById("submitButton");
       var termsLabel = document.getElementById("termsLabel");
-  
+
       if (checkbox.checked) {
         photoButton.disabled = false;
         uploadButton.disabled = false;
@@ -199,25 +220,25 @@
         termsLabel.style.color = "red";
       }
     }
-  
+
     // Function to show submit button when an image is selected
     function showSubmitButton() {
       var uploadInput = document.getElementById("uploadImage");
       var submitButtonContainer = document.getElementById("submitButtonContainer");
-  
+
       if (uploadInput.files.length > 0) {
         submitButtonContainer.classList.remove("hidden");
       } else {
         submitButtonContainer.classList.add("hidden");
       }
     }
-  
+
     // Function to close webcam modal
     function closeWebcamModal() {
       var modal = document.getElementById("webcamModal");
       modal.style.display = "none";
       window.location.href = "#content";
     }
-  </script>  
+  </script>
 </div>
 {% endblock content %}
