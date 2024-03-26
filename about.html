@@ -1,72 +1,98 @@
 <div class="flex flex-wrap justify-center items-start lg:items-center lg:min-h-screen">
     <!-- First column -->
     <div class="w-full lg:w-1/2 px-4 lg:px-16">
-      <!-- Block 1 -->
-      <div class="mb-4 p-3 border-solid border-2 border-gray-300 rounded-md hover:border-gray-400" onclick="showImages(1)">
-        <h2 class="text-lg font-bold mb-2">What is Dermafy?</h2>
-        <p class="text-justify"> 
-            Dermafy, at its core, is a comprehensive skin health application that enables users to scan or submit images of different types of skin issues. 
-            By leveraging a vast dataset and employing an advanced Convolutional Neural Network (CNN) algorithm, 
-            Dermafy facilitates the identification and classification of various skin diseases. 
-            This application acts as a bridge between individuals and dermatologists, 
-            offering quick insights into skin health and supporting professionals in making more informed diagnoses.
-        </p>
-      </div>
-      <!-- Block 2 -->
-      <div class="mb-4 p-3 border-solid border-2 border-gray-300 rounded-md hover:border-gray-400" onclick="showImages(2)">
-        <h2 class="text-lg font-bold mb-2">What is the intent of Dermafy?</h2>
-        <p class="text-justify"> 
-            Dermafy is an innovative skin health application designed with the primary intent of revolutionizing the identification and diagnosis of 
-            various skin diseases. The application serves as a valuable tool to aid and assist both users and dermatologists, 
-            aiming to provide a user-friendly platform for swift and accurate determination of specific skin conditions.
-        </p>
-      </div>
-      <!-- Block 3 -->
-      <div class="mb-4 p-3 border-solid border-2 border-gray-300 rounded-md hover:border-gray-400" onclick="showImages(3)">
-        <h2 class="text-lg font-bold mb-2">How Does it Work?</h2>
-        <p class="text-justify">                
-            Dermafy operates by simplifying the process of identifying skin diseases through a user-friendly interface. 
-            Users can take a photo of their skin concern and submit it through the application. 
-            The power lies in Dermafy's robust CNN algorithm, which analyzes the submitted images and compares them to its extensive dataset of skin diseases. 
-            By picking the closest match within the dataset, Dermafy provides users and dermatologists alike with a quick and accurate diagnosis, 
-            showcasing the potential of modern technology in enhancing skin health assessments.</p>
-      </div>
+        <!-- Block 1 -->
+        <button class="mb-4 p-3 border-solid border-2 border-gray-300 rounded-md hover:border-gray-800" onclick="showImages(1)">
+            <h2 class="text-xl font-bold mb-2 text-gray-800 text-left">What is Dermafy?</h2>
+            <p class="text-justify text-gray-600"> 
+                Dermafy, at its core, is a comprehensive skin health application that enables users to scan or submit images of different types of skin issues. 
+                By leveraging a vast dataset and employing an advanced Convolutional Neural Network (CNN) algorithm, 
+                Dermafy facilitates the identification and classification of various skin diseases. 
+                This application acts as a bridge between individuals and dermatologists, 
+                offering quick insights into skin health and supporting professionals in making more informed diagnoses.
+            </p>
+        </button>
+        <!-- Block 2 -->
+        <button class="mb-4 p-3 border-solid border-2 border-gray-300 rounded-md hover:border-gray-800" onclick="showImages(2)">
+            <h2 class="text-xl font-bold mb-2 text-gray-800 text-left">What is the intent of Dermafy?</h2>
+            <p class="text-justify text-gray-600"> 
+                Dermafy is an innovative skin health application designed with the primary intent of revolutionizing the identification and diagnosis of 
+                various skin diseases. The application serves as a valuable tool to aid and assist both users and dermatologists, 
+                aiming to provide a user-friendly platform for swift and accurate determination of specific skin conditions.
+            </p>
+        </button>
+        <!-- Block 3 -->
+        <button class="mb-4 p-3 border-solid border-2 border-gray-300 rounded-md hover:border-gray-800" onclick="showImages(3)">
+            <h2 class="text-xl font-bold mb-2 text-gray-800 text-left">How Does it Work?</h2>
+            <p class="text-justify text-gray-600">                
+                Dermafy operates by simplifying the process of identifying skin diseases through a user-friendly interface. 
+                Users can take a photo of their skin concern and submit it through the application. 
+                The power lies in Dermafy's robust CNN algorithm, which analyzes the submitted images and compares them to its extensive dataset of skin diseases. 
+                By picking the closest match within the dataset, Dermafy provides users and dermatologists alike with a quick and accurate diagnosis, 
+                showcasing the potential of modern technology in enhancing skin health assessments.</p>
+        </button>
     </div>
     <!-- Second column - Carousel images (hidden in mobile view) -->
     <div class="hidden lg:block lg:w-1/2 flex justify-center items-center">
-      <div id="carousel" class="max-w-full">
-        <!-- Images -->
-        <img src="{{ url_for('static', path='/asset/Dermafy5.png') }}" alt="Image 1" class="w-full hidden">
-        <img src="{{ url_for('static', path='asset/BuMacMal2.png') }}" alt="Image 2" class="w-full hidden">
-        <img src="{{ url_for('static', path='asset/BuMacMal3.png') }}" alt="Image 3" class="w-full hidden">
-      </div>
+        <div id="carousel" class="max-w-full relative overflow-hidden">
+            <!-- Images -->
+            <img src="{{ url_for('static', path='/asset/Dermafy5.png') }}" alt="Image 1" class="w-full absolute transition-opacity duration-500">
+            <img src="{{ url_for('static', path='asset/BuMacMal2.png') }}" alt="Image 2" class="w-full absolute transition-opacity duration-500">
+            <img src="{{ url_for('static', path='asset/BuMacMal3.png') }}" alt="Image 3" class="w-full absolute transition-opacity duration-500">
+        </div>
     </div>
-  </div>
-  
-  <script>
+</div>
+
+<script>
     function showImages(blockNumber) {
-      // Hide all images
-      images.forEach(image => image.classList.add('hidden'));
+        // Hide all images
+        images.forEach(image => image.classList.add('opacity-0'));
 
-      // Show images based on block number
-      switch (blockNumber) {
-        case 1:
-          document.querySelector('#carousel img:nth-child(1)').classList.remove('hidden');
-          break;
-        case 2:
-          document.querySelector('#carousel img:nth-child(2)').classList.remove('hidden');
-          break;
-        case 3:
-          document.querySelector('#carousel img:nth-child(3)').classList.remove('hidden');
-          break;
-        default:
-          break;
-      }
+        // Show images based on block number
+        switch (blockNumber) {
+            case 1:
+                document.querySelector('#carousel img:nth-child(1)').classList.remove('opacity-0');
+                break;
+            case 2:
+                document.querySelector('#carousel img:nth-child(2)').classList.remove('opacity-0');
+                break;
+            case 3:
+                document.querySelector('#carousel img:nth-child(3)').classList.remove('opacity-0');
+                break;
+            default:
+                break;
+        }
+
+        // Adjust parent container height based on the height of the visible image
+        var visibleImage = document.querySelector('#carousel img:not(.opacity-0)');
+        var carousel = document.getElementById('carousel');
+        carousel.style.height = visibleImage.clientHeight + 'px';
     }
-  </script>
+</script>
+
+<script>
+    // Carousel effect
+    var index = 0;
+    var images = document.querySelectorAll('#carousel img');
+    setInterval(function() {
+        // Hide all images
+        images.forEach(image => image.classList.add('opacity-0'));
+
+        // Show the next image
+        images[index].classList.remove('opacity-0');
+        index = (index + 1) % images.length;
+
+        // Adjust parent container height based on the height of the visible image
+        var visibleImage = document.querySelector('#carousel img:not(.opacity-0)');
+        var carousel = document.getElementById('carousel');
+        carousel.style.height = visibleImage.clientHeight + 'px';
+    }, 6000); // Change image every 3 seconds (adjust as needed)
+</script>
+
+
 
   
-  <script>
+  <!-- <script>
     // Carousel effect
     var index = 0;
     var images = document.querySelectorAll('#carousel img');
@@ -75,10 +101,9 @@
       images[index].classList.remove('hidden');
       index = (index + 1) % images.length;
     }, 3000); // Change image every 3 seconds (adjust as needed)
-  </script>
+  </script> -->
   
-  
-
+<!-- ORIGINAL: Uncomment If Shit Falls Apart -->
   <!-- <section class="container mx-auto mt-8 py-32">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-24 px-12">
 
