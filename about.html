@@ -2,7 +2,7 @@
     <!-- First column -->
     <div class="w-full lg:w-1/2 px-4 lg:px-16 md:pt-6">
         <!-- Block 1 -->
-        <button class="mb-4 p-3  border-solid border-2 border-gray-300 rounded-md hover:border-gray-800" onclick="showImages(1)">
+        <button id="block1" class="mb-4 p-3 border-solid border-2 border-gray-300 rounded-md hover:border-gray-800 hover-outline" onclick="toggleSelection(1)">
             <h2 class="text-xl font-bold mb-2 text-gray-800 text-left">What is Dermafy?</h2>
             <p class="text-justify text-gray-600"> 
                 Dermafy, at its core, is a comprehensive skin health application that enables users to scan or submit images of different types of skin issues. 
@@ -13,7 +13,7 @@
             </p>
         </button>
         <!-- Block 2 -->
-        <button class="mb-4 p-3 border-solid border-2 border-gray-300 rounded-md hover:border-gray-800" onclick="showImages(2)">
+        <button id="block2" class="mb-4 p-3 border-solid border-2 border-gray-300 rounded-md hover:border-gray-800 hover-outline" onclick="toggleSelection(2)">
             <h2 class="text-xl font-bold mb-2 text-gray-800 text-left">What is the intent of Dermafy?</h2>
             <p class="text-justify text-gray-600"> 
                 Dermafy is an innovative skin health application designed with the primary intent of revolutionizing the identification and diagnosis of 
@@ -22,7 +22,7 @@
             </p>
         </button>
         <!-- Block 3 -->
-        <button class="mb-4 p-3 border-solid border-2 border-gray-300 rounded-md hover:border-gray-800" onclick="showImages(3)">
+        <button id="block3" class="mb-4 p-3 border-solid border-2 border-gray-300 rounded-md hover:border-gray-800 hover-outline" onclick="toggleSelection(3)">
             <h2 class="text-xl font-bold mb-2 text-gray-800 text-left">How Does it Work?</h2>
             <p class="text-justify text-gray-600">                
                 Dermafy operates by simplifying the process of identifying skin diseases through a user-friendly interface. 
@@ -44,8 +44,29 @@
 </div>
 
 <script>
+    // Function to toggle selection
+    function toggleSelection(blockNumber) {
+        var button = document.getElementById('block' + blockNumber);
+        var isSelected = button.classList.contains('border-gray-800');
+
+        // Remove 'border-blue-500' class from all buttons
+        var buttons = document.querySelectorAll('[id^=block]');
+        buttons.forEach(btn => btn.classList.remove('border-gray-800'));
+
+        // Toggle 'border-blue-500' class for the clicked button
+        if (!isSelected) {
+            button.classList.add('border-gray-800');
+        }
+        
+        // Call the showImages function to display corresponding images
+        showImages(blockNumber);
+    }
+</script>
+
+<script>
     function showImages(blockNumber) {
         // Hide all images
+        var images = document.querySelectorAll('#carousel img');
         images.forEach(image => image.classList.add('opacity-0'));
 
         // Show images based on block number
@@ -68,25 +89,6 @@
         var carousel = document.getElementById('carousel');
         carousel.style.height = visibleImage.clientHeight + 'px';
     }
-</script>
-
-<script>
-    // Carousel effect
-    var index = 0;
-    var images = document.querySelectorAll('#carousel img');
-    setInterval(function() {
-        // Hide all images
-        images.forEach(image => image.classList.add('opacity-0'));
-
-        // Show the next image
-        images[index].classList.remove('opacity-0');
-        index = (index + 1) % images.length;
-
-        // Adjust parent container height based on the height of the visible image
-        var visibleImage = document.querySelector('#carousel img:not(.opacity-0)');
-        var carousel = document.getElementById('carousel');
-        carousel.style.height = visibleImage.clientHeight + 'px';
-    }, 6000); // Change image every 3 seconds (adjust as needed)
 </script>
 
   <!-- <script>
