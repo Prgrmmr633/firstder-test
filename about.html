@@ -33,12 +33,12 @@
         </button>
     </div>
     <!-- Second column - Carousel images (hidden in mobile view) -->
-    <div class="hidden lg:block lg:w-1/2 flex justify-center items-center">
+    <div class="lg:block lg:w-1/2 flex justify-center items-center">
         <div id="carousel" class="max-w-full relative overflow-hidden">
             <!-- Images -->
-            <img src="{{ url_for('static', path='/asset/Dermafy5.png') }}" alt="Image 1" class="w-full absolute transition-opacity duration-500">
-            <img src="{{ url_for('static', path='asset/BuMacMal2.png') }}" alt="Image 2" class="w-full absolute transition-opacity duration-500">
-            <img src="{{ url_for('static', path='asset/BuMacMal3.png') }}" alt="Image 3" class="w-full absolute transition-opacity duration-500">
+            <img src="{{ url_for('static', path='/asset/PH-1.png') }}" alt="Image 1" class="w-full absolute transition-opacity duration-300">
+            <img src="{{ url_for('static', path='asset/PH-2.png') }}" alt="Image 2" class="w-full absolute transition-opacity duration-300">
+            <img src="{{ url_for('static', path='asset/PH-3.png') }}" alt="Image 3" class="w-full absolute transition-opacity duration-300">
         </div>
     </div>
 </div>
@@ -49,11 +49,11 @@
         var button = document.getElementById('block' + blockNumber);
         var isSelected = button.classList.contains('border-gray-800');
 
-        // Remove 'border-blue-500' class from all buttons
+        // Remove 'border' class from all buttons
         var buttons = document.querySelectorAll('[id^=block]');
         buttons.forEach(btn => btn.classList.remove('border-gray-800'));
 
-        // Toggle 'border-blue-500' class for the clicked button
+        // Toggle 'border' class for the clicked button
         if (!isSelected) {
             button.classList.add('border-gray-800');
         }
