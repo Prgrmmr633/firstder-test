@@ -60,7 +60,7 @@
   <!-- Checkbox for Terms and Services Consent -->
   <div class="flex items-center justify-center mt-4">
     <input type="checkbox" id="termsCheckbox" onchange="enableButtons()" />
-    <label id="termsLabel" for="termsCheckbox" class="ml-2"> You must consent to have your image be </br> taken first before using the app. </label>
+    <label id="termsLabel" for="termsCheckbox" class="ml-2"> You must consent before using the app. </label>
   </div>
 
   <div class="mt-4 text-center">
@@ -209,13 +209,13 @@
         photoButton.disabled = false;
         uploadButton.disabled = false;
         submitButton.disabled = false;
-        termsLabel.textContent = "You have consented to having your image taken.";
+        termsLabel.textContent = "You consent to have your image taken.";
         termsLabel.style.color = "green";
       } else {
         photoButton.disabled = true;
         uploadButton.disabled = true;
         submitButton.disabled = true;
-        termsLabel.textContent = "You must consent to have your image be taken first before using the app.";
+        termsLabel.textContent = "You must consent before using the app.";
         termsLabel.style.color = "red";
       }
     }
