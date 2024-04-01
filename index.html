@@ -1,16 +1,16 @@
 {% extends "base.html" %} {% block title %}Index{% endblock %} {% block content %}
-<div class="p-4 max-w-screen-md bg-white shadow-md rounded-lg md:px-48">
+<div class="p-4 mt-10 max-w-screen-md bg-white shadow-md rounded-lg px-12 xl:px-48 ">
   <label
-    class="block text-gray-700 text-4xl font-bold text-center pb-2"
+    class="block text-gray-700 xl:text-4xl font-bold text-center xl:pb-2 text-2xl"
     style="background-clip: text; -webkit-background-clip: text; color: transparent; background-image: linear-gradient(to right, #2563eb, #2dd4bf)">
     Dermafy Now
   </label>
-  <label class="block text-gray-700 text-2xl text-center py-4">Instructions</label>
-  <img src="{{ url_for('static', path='/asset/DermaInstruction.png') }}" alt="instructions" class="mx-auto h-72 rounded-lg" />
+  <label class="block text-gray-700 xl:text-2xl text-center xl:py-4 text-md">Instructions</label>
+  <img src="{{ url_for('static', path='/asset/DermaInstruction.png') }}" alt="instructions" class="mx-auto xl:h-72 rounded-lg h-44" />
 
   <!-- Take a Photo Button -->
   <div class="flex justify-center">
-    <button id="takePhoto" class="w-full h-20 bg-blue-400 text-white font-bold py-2 px-15 m-2 rounded-lg hover:bg-blue-600 text-3xl border-2 border-transparent hover:border-blue-500" onclick="openWebcam()" disabled>Take A Photo</button>
+    <button id="takePhoto" class="bg-blue-400 text-white xl:text-3xl text-xl font-bold py-2 px-15 w-3/4 xl:w-full h-15 xl:h-20 m-1.5 xl:m-2 rounded-lg hover:bg-blue-600 border-2 border-transparent hover:border-blue-500" onclick="openWebcam()" disabled>Take A Photo</button>
     <!-- Webcam Modal (Shows webcam modal when the "Take A Photo" button is clicked) -->
     <div id="webcamModal" class="fixed inset-0 items-center justify-center z-10 hidden bg-black bg-opacity-40">
       <div class="flex items-center justify-center h-screen">
@@ -33,9 +33,9 @@
   <!-- Upload Image Form -->
   <form id="uploadForm" class="w-full" method="post" enctype="multipart/form-data" action="/image">
     <div class="flex justify-center">
-      <div class="w-full h-20 flex items-center justify-center cursor-pointer bg-blue-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 m-2 border-2 border-transparent hover:border-blue-500">
-        <label for="uploadImage" class="text-center cursor-pointer text-3xl"> Upload Image </label>
-        <input class="opacity-0 absolute h-20 cursor-pointer" type="file" id="uploadImage" name="image" accept="image/*" onchange="showSubmitButton()" disabled />
+      <div for="uploadImage" class="h-15 xl:h-20 flex items-center justify-center cursor-pointer bg-blue-400 text-white py-2 px-15 w-3/4 xl:w-full m-1.5 xl:m-2 rounded-lg hover:bg-blue-600  border-2 border-transparent hover:border-blue-500">
+        <label  class="text-center cursor-pointer text-xl xl:text-3xl font-bold"> Upload Image </label>
+        <input class="opacity-0 absolute h-14 w-56 xl:h-20 cursor-pointer" type="file" id="uploadImage" name="image" accept="image/*" onchange="showSubmitButton()" disabled />
       </div>
     </div>
 
@@ -58,9 +58,9 @@
   </form>
 
   <!-- Checkbox for Terms and Services Consent -->
-  <div class="flex items-center justify-center mt-4">
+  <div class="items-center justify-center mt-4">
     <input type="checkbox" id="termsCheckbox" onchange="enableButtons()" />
-    <label id="termsLabel" for="termsCheckbox" class="ml-2"> You must consent before using the app. </label>
+    <label id="termsLabel" for="termsCheckbox" class="ml-2 text-sm xl:text-md"> You must consent before using the app. </label>
   </div>
 
   <div class="mt-4 text-center">
