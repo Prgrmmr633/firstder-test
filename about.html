@@ -61,6 +61,12 @@
         // Call the showImages function to display corresponding images
         showImages(blockNumber);
     }
+
+    // Trigger click event on the button with blockNumber 1 when the section loads
+    window.onload = function() {
+        var button1 = document.getElementById('block1');
+        button1.click();
+    };
 </script>
 
 <script>
