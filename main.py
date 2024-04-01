@@ -80,17 +80,19 @@ async def process(
         with open(image_path, "wb") as f:
             f.write(image_contents)
 
-        # Call the Autoderm API
         api_key = get_current_api_key()  # Get the current API key
+        # print(f"Using API key: {api_key}")  # Debug line
+
         response = requests.post(
             "https://autoderm.ai/v1/query?model=autoderm_v2_2&language=en",
             headers={"Api-Key": api_key},
             files={"file": image_contents},
         )
 
-        if response.status_code == 429:  # API rate limit exceeded
+        if not response.ok or not response.json().get("predictions"):  # If response is not ok or no predictions returned
             rotate_api_key()  # Rotate to the next API key
             api_key = get_current_api_key()  # Get the new current API key
+            # print(f"Switching to new API key: {api_key}")  # Debug line
             response = requests.post(
                 "https://autoderm.ai/v1/query?model=autoderm_v2_2&language=en",
                 headers={"Api-Key": api_key},
