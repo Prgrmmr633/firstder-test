@@ -1,7 +1,7 @@
 {% extends "base.html" %} 
 {% block title %}Index{% endblock %} 
 {% block content %}
-<div class="p-4 h-3/4  flex flex-col md:flex-row md:space-x-4 w-2/3 xl:w-2/4 xl:max-w-screen-md bg-white rounded-lg px-6 xl:px-12 ">
+<div class="p-4 h-3/4 flex flex-col md:flex-row md:space-x-4 w-2/3 xl:w-2/4 xl:max-w-screen-md bg-white rounded-lg px-6 xl:px-12 ">
   <!-- Left Column - Image -->
   <div class="md:w-1/2">
     <label
@@ -14,10 +14,10 @@
   </div>
 
   <!-- Right Column - Buttons -->
-  <div class="md:w-1/2 flex flex-col justify-center">
+  <div class="md:w-1/2 flex flex-col justify-center pt-6">
     <!-- Take a Photo Button -->
     <div class="flex justify-center">
-      <button id="takePhoto" class="bg-blue-400 text-white xl:text-3xl text-xl font-bold py-2 px-15 w-3/4 xl:w-full h-15 xl:h-20 m-1.5 xl:m-2 rounded-lg hover:bg-blue-600 border-2 border-transparent hover:border-blue-500" onclick="openWebcam()" disabled>Take A Photo</button>
+      <button id="takePhoto" class="bg-blue-400 text-white xl:text-3xl text-3xl font-bold py-2 px-15 w-3/4 xl:w-full h-20 xl:h-20 m-1.5 xl:m-2 rounded-lg hover:bg-blue-600 border-2 border-transparent hover:border-blue-500" onclick="openWebcam()" disabled>Take A Photo</button>
       <!-- Webcam Modal (Shows webcam modal when the "Take A Photo" button is clicked) -->
       <div id="webcamModal" class="fixed inset-0 items-center justify-center z-10 hidden bg-black bg-opacity-40">
         <div class="flex items-center justify-center h-screen">
@@ -40,8 +40,8 @@
     <!-- Upload Image Form -->
     <form id="uploadForm" class="w-full" method="post" enctype="multipart/form-data" action="/image">
       <div class="flex justify-center">
-        <div for="uploadImage" class="h-15 xl:h-20 flex items-center justify-center cursor-pointer bg-blue-400 text-white py-2 px-15 w-3/4 xl:w-full m-1.5 xl:m-2 rounded-lg hover:bg-blue-600  border-2 border-transparent hover:border-blue-500">
-          <label  class="text-center cursor-pointer text-xl xl:text-3xl font-bold"> Upload Image </label>
+        <div for="uploadImage" class="h-20 xl:h-20 flex items-center justify-center cursor-pointer bg-blue-400 text-white py-2 px-15 w-3/4 xl:w-full m-1.5 xl:m-2 rounded-lg hover:bg-blue-600  border-2 border-transparent hover:border-blue-500">
+          <label  class="text-center cursor-pointer text-3xl xl:text-3xl font-bold"> Upload Image </label>
           <input class="opacity-0 absolute h-14 w-56 xl:h-20 cursor-pointer" type="file" id="uploadImage" name="image" accept="image/*" onchange="showSubmitButton()" disabled />
         </div>
       </div>
@@ -64,9 +64,9 @@
       <p class="text-gray-600 text-xs italic text-center">Take a Photo or Choose an Image to Submit a Picture</p>
     </form>
     <!-- Checkbox for Terms and Services Consent -->
-<div class="items-center justify-center mt-4">
-  <input type="checkbox" id="termsCheckbox" onchange="enableButtons()" />
-  <label id="termsLabel" for="termsCheckbox" class="ml-2 text-sm xl:text-md"> You must consent before using the app. </label>
+<div class="items-center justify-center mt-4 text-center">
+  <input type="checkbox" id="termsCheckbox" class="rounded-sm" onchange="enableButtons()" />
+  <label id="termsLabel" for="termsCheckbox" class="ml-2 text-sm xl:text-md text font-bold text-gray-800"> You must consent before using the app. </label>
 </div>
 
 <div class="mt-4 text-center">
