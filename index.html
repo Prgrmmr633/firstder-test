@@ -171,6 +171,7 @@
                     // Add event listener to close the popup when the close button is clicked
                     document.getElementById("closePopupBtn").addEventListener("click", function () {
                       document.getElementById("savePopup").classList.add("hidden");
+                      window.location.href = "/"; // Redirect to the homepage ("/") when the button is clicked
                     });
                   })
                   .catch((error) => console.error("Error:", error));

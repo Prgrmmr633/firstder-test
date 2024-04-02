@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import HttpUrl
 from typing import List, Optional
 from database import SessionLocal, engine
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, relationship, selectinload
 import uvicorn
 import requests
 import os
@@ -50,10 +50,6 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-# @app.get("/")
-# async def hero(request: Request):
-#     return templates.TemplateResponse("hero.html", {"request": request})
-
 @app.head("/", status_code=200)
 async def health(response: Response):
     response.status_code = status.HTTP_200_OK
@@ -81,8 +77,6 @@ async def process(
             f.write(image_contents)
 
         api_key = get_current_api_key()  # Get the current API key
-        # print(f"Using API key: {api_key}")  # Debug line
-
         response = requests.post(
             "https://autoderm.ai/v1/query?model=autoderm_v2_2&language=en",
             headers={"Api-Key": api_key},
@@ -92,7 +86,6 @@ async def process(
         if not response.ok or not response.json().get("predictions"):  # If response is not ok or no predictions returned
             rotate_api_key()  # Rotate to the next API key
             api_key = get_current_api_key()  # Get the new current API key
-            # print(f"Switching to new API key: {api_key}")  # Debug line
             response = requests.post(
                 "https://autoderm.ai/v1/query?model=autoderm_v2_2&language=en",
                 headers={"Api-Key": api_key},
@@ -108,7 +101,6 @@ async def process(
             "prediction.html", {"request": request, "image_url": image_url, "predictions": predictions, "confidence_scores": confidence_scores}
         )
     except Exception as e:
-        # Handle any exceptions
         return HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
 
 @app.post("/save_results")
@@ -127,9 +119,7 @@ async def save_results(
 
     for prediction, confidence_score, read_more_url in zip(predictions, confidence_scores, read_more_urls):
         db_prediction = Prediction(name=prediction, confidence_score=confidence_score, read_more_url=read_more_url, date_added=current_datetime)
-        db.add(db_prediction)
-        db.flush()  
-        db_user_input = UserInput(image=image_path, prediction_id=db_prediction.id)
+        db_user_input = UserInput(image=image_path, prediction=db_prediction)  # Pass the Prediction object directly
         db.add(db_user_input)
 
     db.commit()  
@@ -153,12 +143,8 @@ async def view_results(request: Request, db: Session = db_dependency):
 async def view_result(request: Request, result_id: int, prediction_date: str, db: Session = db_dependency):
     result = db.query(UserInput).filter_by(id=result_id).first()
 
-    # Convert prediction_date to a datetime object
     prediction_date = datetime.strptime(prediction_date, "%Y-%m-%d %H:%M:%S.%f")
 
-    print("Requested prediction date:", prediction_date)
-
-    # Fetch predictions and filter them based on the prediction_date
     predictions = (
         db.query(Prediction)
         .join(UserInput, Prediction.id == UserInput.prediction_id)
@@ -167,6 +153,26 @@ async def view_result(request: Request, result_id: int, prediction_date: str, db
     )
 
     return templates.TemplateResponse("results_details.html", {"request": request, "result": result, "predictions": predictions, "prediction_date": prediction_date})
+
+@app.post("/delete/{result_id}")
+async def delete_result(request: Request, result_id: int, db: Session = db_dependency):
+    result = db.query(UserInput).filter_by(id=result_id).first()
+
+    if not result:
+        raise HTTPException(status_code=404, detail="Result not found")
+
+    try:
+        # Get the range of result_id values to delete
+        result_range = range(result_id, result_id + 5)
+
+        # Delete all records within the range
+        db.query(UserInput).filter(UserInput.id.in_(result_range)).delete(synchronize_session=False)
+        db.commit()
+
+        return {"message": "Results deleted successfully"}
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="localhost", port=3100, reload=False)
