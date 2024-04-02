@@ -43,6 +43,18 @@
   <input type="hidden" name="read_more_urls" value="{{ predictions[i]['readMoreUrl'] }}" />
   {% endfor %}
 </form>
+</div> <!-- Close the div for the main content -->
+
+<!-- Add this div for the popup -->
+<div id="savePopup" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+  <div class="bg-white p-6 rounded-lg">
+    <p class="text-lg font-bold mb-2">Results Saved Successfully!</p>
+    <div class="flex justify-center"> <!-- Center the close button horizontally -->
+      <button id="closePopupBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Close</button>
+    </div>
+  </div>
+</div>
+
 <script>
   // Redirect to the content section of the page when the page loads
   window.onload = function () {
@@ -57,11 +69,7 @@
     window.location.href = "/"; // Redirect to the homepage ("/") when the button is clicked
   });
 
-  // document.getElementById("saveResultsBtn").addEventListener("click", function () {
-  //   document.getElementById("saveResultsForm").submit(); // Submit the form when the button is clicked
-  // });
-
-  // Use fetch to submit the form data using JavaScript (Shows reults are saved message on the page without refreshing the page)
+  // Add event listener to show the popup when the button is clicked
   document.getElementById("saveResultsBtn").addEventListener("click", function (event) {
     event.preventDefault(); // Prevent the form from being submitted the default way
 
@@ -74,14 +82,18 @@
     })
       .then((response) => response.json())
       .then((data) => {
-        // Display the JSON response in the console or somewhere on the page
         console.log(data);
-        // Show the save message
-        document.getElementById("saveMessage").style.display = "block";
+        // Show the popup
+        document.getElementById("savePopup").classList.remove("hidden");
       })
       .catch((error) => {
         console.error("Error:", error);
       });
+  });
+
+  // Add event listener to close the popup when the close button is clicked
+  document.getElementById("closePopupBtn").addEventListener("click", function () {
+    document.getElementById("savePopup").classList.add("hidden");
   });
 </script>
 {% endblock %}
