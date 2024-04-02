@@ -1,71 +1,81 @@
-{% extends "base.html" %} {% block title %}Index{% endblock %} {% block content %}
-<div class="p-4 max-w-screen-md bg-white shadow-md rounded-lg md:px-48">
-  <label
-    class="block text-gray-700 text-4xl font-bold text-center pb-2"
-    style="background-clip: text; -webkit-background-clip: text; color: transparent; background-image: linear-gradient(to right, #2563eb, #2dd4bf)">
-    Dermafy Now
-  </label>
-  <label class="block text-gray-700 text-2xl text-center py-4">Instructions</label>
-  <img src="{{ url_for('static', path='/asset/DermaInstruction.png') }}" alt="instructions" class="mx-auto h-72 rounded-lg" />
+{% extends "base.html" %} 
+{% block title %}Index{% endblock %} 
+{% block content %}
+<div class="p-4 h-3/4 flex flex-col md:flex-row md:space-x-4 w-2/3 xl:w-2/4 xl:max-w-screen-md bg-white rounded-lg px-6 xl:px-12 ">
+  <!-- Left Column - Image -->
+  <div class="md:w-1/2">
+    <label
+      class="block text-gray-700 xl:text-4xl font-bold text-center xl:pb-2 text-2xl"
+      style="background-clip: text; -webkit-background-clip: text; color: transparent; background-image: linear-gradient(to right, #2563eb, #2dd4bf)">
+      Dermafy Now
+    </label>
+    <label class="block text-gray-700 xl:text-2xl text-center xl:py-4 text-xl">Instructions</label>
+    <img src="{{ url_for('static', path='/asset/DermaInstruction.png') }}" alt="instructions" class="mx-auto xl:h-72 rounded-lg h-4/5" />
+  </div>
 
-  <!-- Take a Photo Button -->
-  <div class="flex justify-center">
-    <button id="takePhoto" class="w-full h-20 bg-blue-400 text-white font-bold py-2 px-15 m-2 rounded-lg hover:bg-blue-600 text-3xl border-2 border-transparent hover:border-blue-500" onclick="openWebcam()" disabled>Take A Photo</button>
-    <!-- Webcam Modal (Shows webcam modal when the "Take A Photo" button is clicked) -->
-    <div id="webcamModal" class="fixed inset-0 items-center justify-center z-10 hidden bg-black bg-opacity-40">
-      <div class="flex items-center justify-center h-screen">
-        <div class="bg-white m-auto p-5 border border-gray-300 shadow-lg rounded-lg w-3/5 relative">
-          <video id="video" class="my-4 mx-auto max-w-full shadow-lg rounded-lg max-h-full" autoplay></video>
-          <button class="absolute top-0 right-0 m-2 text-xl" onclick="closeWebcamModal()">
-            <div class="close-button w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
-              <span class="text-white">&times;</span>
-            </div>
-          </button>
-          <button id="snap" class="w-full py-2 mt-2 bg-blue-500 text-white rounded hover:bg-blue-700 border-2 border-transparent hover:border-blue-500">Snap Photo</button>
-          <canvas id="canvas" class="my-4 mx-auto max-w-full shadow-lg rounded-lg max-h-full hidden border-2 border-transparent hover:border-green-500"></canvas>
-          <button id="done" class="w-full py-2 mt-2 bg-green-500 text-white rounded hover:bg-green-700 hidden">Submit</button>
-          <button id="retake" class="w-full py-2 mt-2 bg-blue-500 text-white rounded hover:bg-blue-700 hidden border-2 border-transparent hover:border-blue-500">Retake</button>
+  <!-- Right Column - Buttons -->
+  <div class="md:w-1/2 flex flex-col justify-center pt-6">
+    <!-- Take a Photo Button -->
+    <div class="flex justify-center">
+      <button id="takePhoto" class="bg-blue-400 text-white xl:text-3xl text-3xl font-bold py-2 px-15 w-3/4 xl:w-full h-20 xl:h-20 m-1.5 xl:m-2 rounded-lg hover:bg-blue-600 border-2 border-transparent hover:border-blue-500" onclick="openWebcam()" disabled>Take A Photo</button>
+      <!-- Webcam Modal (Shows webcam modal when the "Take A Photo" button is clicked) -->
+      <div id="webcamModal" class="fixed inset-0 items-center justify-center z-10 hidden bg-black bg-opacity-40">
+        <div class="flex items-center justify-center h-screen">
+          <div class="bg-white m-auto p-5 border border-gray-300 shadow-lg rounded-lg w-3/5 relative">
+            <video id="video" class="my-4 mx-auto max-w-full shadow-lg rounded-lg max-h-full" autoplay></video>
+            <button class="absolute top-0 right-0 m-2 text-xl" onclick="closeWebcamModal()">
+              <div class="close-button w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
+                <span class="text-white">&times;</span>
+              </div>
+            </button>
+            <button id="snap" class="w-full py-2 mt-2 bg-blue-500 text-white rounded hover:bg-blue-700 border-2 border-transparent hover:border-blue-500">Snap Photo</button>
+            <canvas id="canvas" class="my-4 mx-auto max-w-full shadow-lg rounded-lg max-h-full hidden border-2 border-transparent hover:border-green-500"></canvas>
+            <button id="done" class="w-full py-2 mt-2 bg-green-500 text-white rounded hover:bg-green-700 hidden">Submit</button>
+            <button id="retake" class="w-full py-2 mt-2 bg-blue-500 text-white rounded hover:bg-blue-700 hidden border-2 border-transparent hover:border-blue-500">Retake</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Upload Image Form -->
-  <form id="uploadForm" class="w-full" method="post" enctype="multipart/form-data" action="/image">
-    <div class="flex justify-center">
-      <div class="w-full h-20 flex items-center justify-center cursor-pointer bg-blue-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 m-2 border-2 border-transparent hover:border-blue-500">
-        <label for="uploadImage" class="text-center cursor-pointer text-3xl"> Upload Image </label>
-        <input class="opacity-0 absolute h-20 cursor-pointer" type="file" id="uploadImage" name="image" accept="image/*" onchange="showSubmitButton()" disabled />
+    <!-- Upload Image Form -->
+    <form id="uploadForm" class="w-full" method="post" enctype="multipart/form-data" action="/image">
+      <div class="flex justify-center">
+        <div for="uploadImage" class="h-20 xl:h-20 flex items-center justify-center cursor-pointer bg-blue-400 text-white py-2 px-15 w-3/4 xl:w-full m-1.5 xl:m-2 rounded-lg hover:bg-blue-600  border-2 border-transparent hover:border-blue-500">
+          <label  class="text-center cursor-pointer text-3xl xl:text-3xl font-bold"> Upload Image </label>
+          <input class="opacity-0 absolute h-14 w-56 xl:h-20 cursor-pointer" type="file" id="uploadImage" name="image" accept="image/*" onchange="showSubmitButton()" disabled />
+        </div>
       </div>
-    </div>
 
-    <div class="md:flex md:items-center justify-center">
-      <div id="submitButtonContainer" class="hidden">
-        <!-- Disabled Submit Button Until Checkbox is Checked -->
-        <button
-          id="submitButton"
-          class="shadow bg-green-500 hover:bg-green-700 rounded-lg focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 m-2"
-          type="submit"
-          name="submit"
-          disabled
-        >
-          Submit
-        </button>
+      <div class="md:flex md:items-center justify-center">
+        <div id="submitButtonContainer" class="hidden">
+          <!-- Disabled Submit Button Until Checkbox is Checked -->
+          <button
+            id="submitButton"
+            class="shadow bg-green-500 hover:bg-green-700 rounded-lg focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 m-2"
+            type="submit"
+            name="submit"
+            disabled
+          >
+            Submit
+          </button>
+        </div>
       </div>
-    </div>
 
-    <p class="text-gray-600 text-xs italic text-center">Take a Photo or Choose an Image to Submit a Picture</p>
-  </form>
+      <p class="text-gray-600 text-xs italic text-center">Take a Photo or Choose an Image to Submit a Picture</p>
+    </form>
+    <!-- Checkbox for Terms and Services Consent -->
+<div class="items-center justify-center mt-4 text-center">
+  <input type="checkbox" id="termsCheckbox" class="rounded-sm" onchange="enableButtons()" />
+  <label id="termsLabel" for="termsCheckbox" class="ml-2 text-sm xl:text-md text font-bold text-gray-800"> You must consent before using the app. </label>
+</div>
 
-  <!-- Checkbox for Terms and Services Consent -->
-  <div class="flex items-center justify-center mt-4">
-    <input type="checkbox" id="termsCheckbox" onchange="enableButtons()" />
-    <label id="termsLabel" for="termsCheckbox" class="ml-2"> You must consent before using the app. </label>
+<div class="mt-4 text-center">
+  <a href="/results/#content" class="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">View Past Results</a>
+</div>
   </div>
+</div>
 
-  <div class="mt-4 text-center">
-    <a href="/results/#content" class="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">View Past Results</a>
-  </div>
+
 
   <script>
     // Function to enable webcam and display modal
