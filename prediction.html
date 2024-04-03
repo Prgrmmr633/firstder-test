@@ -2,24 +2,24 @@
 {% block title %}Predictions{% endblock %}
 {% block content %}
 <div class="w-2/3 mx-auto">
-  <label class="block text-gray-700 text-4xl font-bold text-center pb-2" style="background-clip: text; -webkit-background-clip: text; color: transparent;
+  <label class="block text-gray-700 text-2xl xl:text-4xl font-bold text-center pb-2 pt-2 " style="background-clip: text; -webkit-background-clip: text; color: transparent;
   background-image: linear-gradient(to right, #2563eb, #2dd4bf)">Your Image</label>
-  <img src="{{ url_for('static', path=image_url) }}" alt="Uploaded Image" class="my-4 mx-auto max-w-full shadow-md rounded-lg" style="height: 25vh;">
+  <img src="{{ url_for('static', path=image_url) }}" alt="Uploaded Image" class="my-1.5 mx-auto max-w-full shadow-md rounded-lg" style="height: 25vh;">
   <div class="bg-gray-800 shadow-md rounded-lg py-2">
     <table class="text-left w-full border-collapse">
       <thead class="bg-gray-800">
         <tr class="">
-          <th class="py-4 px-6 font-bold uppercase text-center text-sm text-white border-b">Prediction</th>
-          <th class="py-4 px-6 font-bold uppercase text-center text-sm text-white border-b">Confidence Score</th>
-          <th class="py-4 px-6 font-bold uppercase text-center text-sm text-white border-b">Actions</th>
+          <th class="py-1.5 px-4 font-bold uppercase text-center text-sm text-white border-b">Prediction</th>
+          <th class="py-1.5 px-4 font-bold uppercase text-center text-sm text-white border-b">Confidence Score</th>
+          <th class="py-1.5 px-4 font-bold uppercase text-center text-sm text-white border-b">Actions</th>
         </tr>
       </thead>
       <tbody class="bg-white text-center">
         {% for i in range(predictions|length) %}
         <tr class="hover:bg-gray-50">
-          <td class="py-4 px-6 border-b border-gray-200 justify-between">{{ predictions[i]["name"] }}</td>
-          <td class="py-4 px-6 border-b border-gray-200 justify-between">{{ (confidence_scores[i] * 100)|float|round(1) }}%</td>
-          <td class="flex justify-center lg:block py-4 px-6 border-b border-gray-200">
+          <td class="py-0 px-4 border-b border-gray-200 justify-between">{{ predictions[i]["name"] }}</td>
+          <td class="py-0 px-4 border-b border-gray-200 justify-between">{{ (confidence_scores[i] * 100)|float|round(1) }}%</td>
+          <td class="flex justify-center lg:block py-1.5 px-4 border-b border-gray-200">
             <div class="flex justify-center">
               <a href="{{ predictions[i]['readMoreUrl'] }}" class="text-white font-bold py-1 px-3 rounded text-xs bg-green-500 hover:bg-green-700">Learn More</a>
               <input type="hidden" name="read_more_urls" value="{{ predictions[i]['readMoreUrl'] }}" />
