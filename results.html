@@ -31,6 +31,20 @@
       </tbody>
     </table>
   </div>
+  <!-- Pagination Controls -->
+  <div class="flex justify-center items-center mt-4">
+    <div class="flex items-center">
+      <a href="{% if page > 1 %}/results?page={{ page - 1 }}#content{% endif %}" 
+        class="bg-blue-500 {% if page == 1 %}opacity-50 cursor-not-allowed pointer-events-none{% endif %} hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2">
+        Previous
+      </a>
+      <span class="mx-2">Page {{ page }} of {{ total_pages }}</span>
+      <a href="{% if page < total_pages %}/results?page={{ page + 1 }}#content{% endif %}" 
+        class="bg-blue-500 {% if page == total_pages %}opacity-50 cursor-not-allowed pointer-events-none{% endif %} hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2">
+        Next
+      </a>
+    </div>
+  </div>
   <div class="flex justify-center mt-4">
     <a href="/#content" class="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded ml-2">Back</a>
   </div>

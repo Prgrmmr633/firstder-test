@@ -14,6 +14,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import func
 from datetime import datetime
 import time
+import math
 
 templates = Jinja2Templates(directory=".")
 app = FastAPI()
@@ -127,17 +128,29 @@ async def save_results(
     return {"message": "Results saved successfully"}
 
 @app.get("/results", response_class=HTMLResponse)
-async def view_results(request: Request, db: Session = db_dependency):
-    results = (
+async def view_results(request: Request, page: int = 1, db: Session = db_dependency):
+    per_page = 5
+    skip = (page - 1) * per_page
+
+    # Fetch only the filtered results for the current page
+    filtered_results = (
         db.query(Prediction)
         .join(UserInput, Prediction.id == UserInput.prediction_id)
         .filter(func.date(Prediction.date_added) == func.date(UserInput.date_added))
-        .order_by(Prediction.date_added)
-        .filter(Prediction.id % 5 == 1)  # Filter every 5th row
+        .order_by(Prediction.date_added.desc())
+        .filter(Prediction.id % 5 == 1)  # Apply the same filter here for consistency
+        .offset(skip)
+        .limit(per_page)
         .all()
     )
 
-    return templates.TemplateResponse("results.html", {"request": request, "results": results})
+    # Count the total number of filtered results for the entire dataset
+    total_filtered_results = db.query(UserInput).filter(UserInput.id % 5 == 1).count()
+
+    # Calculate total pages based on the number of filtered results
+    total_pages = math.ceil(total_filtered_results / per_page)
+
+    return templates.TemplateResponse("results.html", {"request": request, "results": filtered_results, "page": page, "total_pages": total_pages})
 
 @app.get("/result/{result_id}", response_class=HTMLResponse)
 async def view_result(request: Request, result_id: int, prediction_date: str, db: Session = db_dependency):
