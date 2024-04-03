@@ -1,4 +1,4 @@
-<section class="relative bg-cover bg-center mx-0 my-0" style="background-image: url('{{ url_for('static', path='asset/Dermafy_Loop.gif') }}');">
+<div class="relative bg-cover bg-center mx-0 my-0" style="background-image: url('{{ url_for('static', path='asset/Dermafy_Loop.gif') }}');">
     <div class="max-w-screen-xl h-screen flex items-center justify-center z-100 mx-auto">
       <!-- Hero content -->
       <div class="text-center bg-transparent">
@@ -18,7 +18,7 @@
             </p>
             <div class="max-w-xs mx-auto sm:max-w-none sm:flex sm:justify-center">
               <div>
-                <a class=" bg-blue-500 border-solid border-2 border-transparent hover:border-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                <a id="startNow" class="bg-blue-500 border-solid border-2 border-transparent hover:border-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
                   href="#content">
                   Start Now
                 </a>
@@ -28,4 +28,12 @@
         </div>
       </div>
     </div>
-  </section>
+  </div>
+
+  <script>
+    document.getElementById('startNow').addEventListener('click', function(event) {
+      window.location.href = "/"; // Redirect to the homepage ("/") when the button is clicked
+      window.location.reload(); // Reload the page
+      window.location.href = "/#content"; // Redirect to the homepage ("/") when the button is clicked
+    });
+  </script>

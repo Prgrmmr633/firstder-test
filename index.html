@@ -21,15 +21,17 @@
       <!-- Webcam Modal (Shows webcam modal when the "Take A Photo" button is clicked) -->
       <div id="webcamModal" class="fixed inset-0 items-center justify-center z-10 hidden bg-black bg-opacity-40">
         <div class="flex items-center justify-center h-screen">
-          <div class="bg-white m-auto p-5 border border-gray-300 shadow-lg rounded-lg w-3/5 relative">
-            <video id="video" class="my-4 mx-auto max-w-full shadow-lg rounded-lg max-h-full" autoplay></video>
+          <div class="bg-white m-auto p-5 border border-gray-300 shadow-lg rounded-lg xl:w-2/5 lg:w-1/2 relative">
+            <div class="my-4 mx-10 max-w-full shadow-lg rounded-lg max-h-full" style="overflow:hidden"><video id="video" class="mx-auto max-w-full shadow-lg rounded-lg" autoplay></video></div>
+            <!-- Slider for Zoom -->
+            <input type="range" min="1" max="10" value="1" step="0.1" id="zoomSlider" class="w-full mt-2" onchange="changeZoom()">
             <button class="absolute top-0 right-0 m-2 text-xl" onclick="closeWebcamModal()">
               <div class="close-button w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
                 <span class="text-white">&times;</span>
               </div>
             </button>
             <button id="snap" class="w-full py-2 mt-2 bg-blue-500 text-white rounded hover:bg-blue-700 border-2 border-transparent hover:border-blue-500">Snap Photo</button>
-            <canvas id="canvas" class="my-4 mx-auto max-w-full shadow-lg rounded-lg max-h-full hidden border-2 border-transparent hover:border-green-500"></canvas>
+            <div class="mx-10 max-w-full rounded-lg max-h-full"><canvas id="canvas" class="mx-auto max-w-full shadow-lg rounded-lg max-h-full hidden border-4 border-transparent hover:border-green-500"></canvas></div>
             <button id="done" class="w-full py-2 mt-2 bg-green-500 text-white rounded hover:bg-green-700 hidden">Submit</button>
             <button id="retake" class="w-full py-2 mt-2 bg-blue-500 text-white rounded hover:bg-blue-700 hidden border-2 border-transparent hover:border-blue-500">Retake</button>
           </div>
@@ -66,7 +68,7 @@
     <!-- Checkbox for Terms and Services Consent -->
 <div class="items-center justify-center mt-4 text-center">
   <input type="checkbox" id="termsCheckbox" class="rounded-sm" onchange="enableButtons()" />
-  <label id="termsLabel" for="termsCheckbox" class="ml-2 text-sm xl:text-md text font-bold text-gray-800"> You must consent before using the app. </label>
+  <label id="termsLabel" for="termsCheckbox" class="ml-2 text-sm xl:text-md text font-bold" style="color:red"> You must consent before using the app. </label>
 </div>
 
 <div class="mt-4 text-center">
@@ -75,10 +77,25 @@
   </div>
 </div>
 
-
+<!-- Add this div for the popup -->
+<div id="savePopup" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+  <div class="bg-white p-6 rounded-lg">
+    <p class="text-lg font-bold mb-2">Results Saved Successfully!</p>
+    <div class="flex justify-center"> <!-- Center the close button horizontally -->
+      <button id="closePopupBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Close</button>
+    </div>
+  </div>
+</div>
 
   <script>
-    // Function to enable webcam and display modal
+    // Function to change zoom
+    function changeZoom() {
+      var video = document.getElementById("video");
+      var zoomValue = parseFloat(document.getElementById("zoomSlider").value);
+      video.style.transform = "scale(" + zoomValue + ")";
+    }
+
+    // Update enableWebcam function to include zoom functionality
     function enableWebcam() {
       let imageData = null;
 
@@ -143,12 +160,18 @@
                         .then((data) => {
                           // Display the JSON response in the console or somewhere on the page
                           console.log(data);
-                          // Show the save message
-                          document.getElementById("saveMessage").style.display = "block";
+                                  // Show the popup
+                                  document.getElementById("savePopup").classList.remove("hidden"); 
                         })
                         .catch((error) => {
                           console.error("Error:", error);
                         });
+                    });
+
+                    // Add event listener to close the popup when the close button is clicked
+                    document.getElementById("closePopupBtn").addEventListener("click", function () {
+                      document.getElementById("savePopup").classList.add("hidden");
+                      window.location.href = "/"; // Redirect to the homepage ("/") when the button is clicked
                     });
                   })
                   .catch((error) => console.error("Error:", error));
@@ -164,29 +187,46 @@
           });
 
           snapButton.addEventListener("click", function () {
+            // Hide the zoom slider
+            document.getElementById("zoomSlider").style.display = "none";
+        
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
-
+                
             var context = canvas.getContext("2d");
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            var zoomValue = parseFloat(document.getElementById("zoomSlider").value);
+            var scaledWidth = canvas.width / zoomValue;
+            var scaledHeight = canvas.height / zoomValue;
+            var offsetX = (video.videoWidth - scaledWidth) / 2;
+            var offsetY = (video.videoHeight - scaledHeight) / 2;
+                
+            context.drawImage(
+                video,
+                offsetX, offsetY, scaledWidth, scaledHeight,
+                0, 0, canvas.width, canvas.height
+            );
+                
             video.style.display = "none";
             canvas.style.display = "block";
             snapButton.style.display = "none";
             doneButton.style.display = "block";
             retakeButton.style.display = "block"; // Show retake button after capturing image
-
+                
             imageData = canvas.toDataURL("image/png");
-          });
-
+        }); 
+        
           // Retake button functionality
           retakeButton.addEventListener("click", function () {
+            // Show the zoom slider
+            document.getElementById("zoomSlider").style.display = "block";
+        
             video.style.display = "block";
             canvas.style.display = "none";
             snapButton.style.display = "block";
             doneButton.style.display = "none";
             retakeButton.style.display = "none";
             imageData = null; // Reset imageData when retaking the photo
-          });
+         });
         })
         .catch(function (err) {
           console.error("Error accessing webcam:", err);
@@ -198,6 +238,10 @@
       if (!isCheckboxChecked()) {
         return;
       }
+      // Reset the slider value to 1
+      document.getElementById("zoomSlider").value = 1;
+      // Reset the image zoom to 1
+      document.getElementById("video").style.transform = "scale(1)";
       enableWebcam(); // Call the function to enable webcam and display modal
     });
 
