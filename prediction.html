@@ -8,20 +8,20 @@
   <div class="bg-gray-800 shadow-md rounded-lg py-2">
     <table class="text-left w-full border-collapse">
       <thead class="bg-gray-800">
-        <tr class="">
-          <th class="py-1.5 px-4 font-bold uppercase text-center text-sm text-white border-b">Prediction</th>
-          <th class="py-1.5 px-4 font-bold uppercase text-center text-sm text-white border-b">Confidence Score</th>
-          <th class="py-1.5 px-4 font-bold uppercase text-center text-sm text-white border-b">Actions</th>
+        <tr>
+          <th class="py-0 px-4 font-bold uppercase text-center text-sm text-white border-b pb-2">Prediction</th>
+          <th class="py-0 px-4 font-bold uppercase text-center text-sm text-white border-b pb-2">Confidence Score</th>
+          <th class="py-0 px-4 font-bold uppercase text-center text-sm text-white border-b pb-2">Actions</th>
         </tr>
       </thead>
       <tbody class="bg-white text-center">
         {% for i in range(predictions|length) %}
         <tr class="hover:bg-gray-50">
-          <td class="py-0 px-4 border-b border-gray-200 justify-between">{{ predictions[i]["name"] }}</td>
-          <td class="py-0 px-4 border-b border-gray-200 justify-between">{{ (confidence_scores[i] * 100)|float|round(1) }}%</td>
+          <td class="py-0 px-4 border-b border-gray-200 justify-between text-sm">{{ predictions[i]["name"] }}</td>
+          <td class="py-0 px-4 border-b border-gray-200 justify-between text-sm">{{ (confidence_scores[i] * 100)|float|round(1) }}%</td>
           <td class="flex justify-center lg:block py-1.5 px-4 border-b border-gray-200">
             <div class="flex justify-center">
-              <a href="{{ predictions[i]['readMoreUrl'] }}" class="text-white font-bold py-1 px-3 rounded text-xs bg-green-500 hover:bg-green-700">Learn More</a>
+              <a href="{{ predictions[i]['readMoreUrl'] }}" class="text-white font-bold py-0.5 px-3 rounded bg-green-500 hover:bg-green-700 text-xs">Learn More</a>
               <input type="hidden" name="read_more_urls" value="{{ predictions[i]['readMoreUrl'] }}" />
             </div>
           </td>
