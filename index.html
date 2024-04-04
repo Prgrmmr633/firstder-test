@@ -100,7 +100,12 @@
       let imageData = null;
 
       navigator.mediaDevices
-        .getUserMedia({ video: true })
+        .getUserMedia({ 
+          video: { 
+              width: { ideal: 4096 }, // Use a high value for 'ideal'
+              height: { ideal: 2160 } // Use a high value for 'ideal'
+          } 
+        })
         .then(function (stream) {
           var video = document.getElementById("video");
           var canvas = document.getElementById("canvas");
