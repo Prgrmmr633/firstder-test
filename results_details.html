@@ -1,14 +1,23 @@
 {% extends "base.html" %}
+
 {% block title %}Result Details{% endblock %}
+
 {% block content %}
+
 <div class="w-3/4 mx-auto">
-  <label class="block text-gray-700 text-2xl xl:text-4xl font-bold text-center pt-2" 
-  style="background-clip: text; -webkit-background-clip: text; color: transparent;
-  background-image: linear-gradient(to right, #2563eb, #2dd4bf);"> Results Details </label>
+
+  <label class="block text-gray-700 text-2xl xl:text-4xl font-bold text-center pt-2"
+         style="background-clip: text; -webkit-background-clip: text; color: transparent;
+         background-image: linear-gradient(to right, #2563eb, #2dd4bf);"> Results Details </label>
+
   <p class="text-center m2-4">Prediction Date: {{ prediction_date.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+
   <img src="{{ url_for('static', path=result.image) }}" alt="Uploaded Image" class="my-2 mx-auto max-w-full shadow-md rounded-lg" style="height: 25vh;">
+
   <div class="bg-gray-800 shadow-md rounded-lg py-2">
+
     <table class="text-left w-full border-collapse">
+
       <thead class="bg-gray-800">
         <tr>
           <th class="py-0 px-4 font-bold uppercase text-center text-sm text-white border-b pb-2">Prediction</th>
@@ -16,6 +25,7 @@
           <th class="py-0 px-4 font-bold uppercase text-center text-sm text-white border-b pb-2">Actions</th>
         </tr>
       </thead>
+
       <tbody class="bg-white text-center">
         {% set sorted_predictions = predictions|sort(attribute='confidence_score', reverse=true) %}
         {% for prediction in sorted_predictions %}
@@ -25,15 +35,17 @@
               <td class="py-0 px-4 border-b border-gray-200 justify-between text-sm">{{ (prediction.confidence_score * 100)|float|round(1) }}%</td>
               <td class="flex justify-center lg:block py-1 px-4 border-b border-gray-200">
                 <div class="flex justify-center">
-                  <a href="{{ prediction.read_more_url }}" class="text-white font-bold py-0.5 px-3 rounded bg-green-500 hover:bg-green-700 text-xs">Learn More</a>
+                  <a href="#" class="text-white font-bold py-0.5 px-3 rounded bg-green-500 hover:bg-green-700 text-xs" data-url="{{ prediction.read_more_url }}" id="learnMoreBtn">Learn More</a>
                 </div>
               </td>
             </tr>
           {% endif %}
         {% endfor %}
       </tbody>
+
     </table>
   </div>
+
   <div class="flex justify-center mt-2">
     <div class="flex space-x-4">
       <a href="/results/#content" class="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded ml-2">Back</a>
@@ -42,14 +54,58 @@
       </a>
     </div>
   </div>
+
 </div>
+
+<!-- Modal -->
+<div id="modal" class="fixed z-50 inset-0 overflow-y-auto flex items-center justify-center hidden">
+  <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+  <div class="relative bg-white rounded-lg overflow-hidden shadow-xl transform transition-all w-11/12 h-5/6 sm:max-w-6xl sm:h-5/6">
+    <button type="button" class="absolute top-0 right-0 mt-4 mr-4 inline-flex justify-center rounded-md border border-white shadow-sm px-4 py-2 bg-red-500 text-base font-medium text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-3 sm:ml-3 sm:w-auto sm:text-sm" id="closeModal">
+      <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    <div class="h-full">
+      <iframe id="modalContent" class="w-full h-full" frameborder="0"></iframe>
+    </div>
+  </div>
+</div>
+
 <script>
   window.onload = function () {
     window.location.href = "#content";
   };
 
   document.getElementById("submitAnotherBtn").addEventListener("click", function() {
-    window.location.href = "/";  // Redirect to the homepage ("/") when the button is clicked
+    window.location.href = "/";
+  });
+
+  var modal = document.getElementById("modal");
+  var modalContent = document.getElementById("modalContent");
+  var learnMoreBtns = document.querySelectorAll("#learnMoreBtn");
+  var closeModalBtn = document.getElementById("closeModal");
+
+  learnMoreBtns.forEach(function(btn) {
+    btn.addEventListener("click", function(event) {
+      event.preventDefault();
+      var url = this.dataset.url;
+      modalContent.src = url;
+      modal.classList.remove("hidden");
+    });
+  });
+
+  closeModalBtn.addEventListener("click", function() {
+    modal.classList.add("hidden");
+    modalContent.src = "";
+  });
+
+  window.addEventListener("click", function(event) {
+    if (event.target == modal) {
+      modal.classList.add("hidden");
+      modalContent.src = "";
+    }
   });
 </script>
+
 {% endblock %}
