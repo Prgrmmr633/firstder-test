@@ -77,6 +77,21 @@
   </div>
 </div>
 
+<!-- Modal -->
+<div id="modal" class="fixed z-50 inset-0 overflow-y-auto flex items-center justify-center hidden">
+  <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+  <div class="relative bg-white rounded-lg overflow-hidden shadow-xl transform transition-all w-11/12 h-5/6 sm:max-w-6xl sm:h-5/6">
+    <button type="button" class="absolute top-0 right-0 mt-4 mr-4 inline-flex justify-center rounded-md border border-white shadow-sm px-4 py-2 bg-red-500 text-base font-medium text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-3 sm:ml-3 sm:w-auto sm:text-sm" id="closeModal">
+      <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    <div class="h-full">
+      <iframe id="modalContent" class="w-full h-full" frameborder="0"></iframe>
+    </div>
+  </div>
+</div>
+
 <!-- Add this div for the popup -->
 <div id="savePopup" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
   <div class="bg-white p-6 rounded-lg">
@@ -177,6 +192,32 @@
                     document.getElementById("closePopupBtn").addEventListener("click", function () {
                       document.getElementById("savePopup").classList.add("hidden");
                       window.location.href = "/"; // Redirect to the homepage ("/") when the button is clicked
+                    });
+
+                    var modal = document.getElementById("modal");
+                    var modalContent = document.getElementById("modalContent");
+                    var learnMoreBtns = document.querySelectorAll("#learnMoreBtn");
+                    var closeModalBtn = document.getElementById("closeModal");
+                  
+                    learnMoreBtns.forEach(function(btn) {
+                      btn.addEventListener("click", function(event) {
+                        event.preventDefault();
+                        var url = this.dataset.url;
+                        modalContent.src = url;
+                        modal.classList.remove("hidden");
+                      });
+                    });
+                  
+                    closeModalBtn.addEventListener("click", function() {
+                      modal.classList.add("hidden");
+                      modalContent.src = "";
+                    });
+                  
+                    window.addEventListener("click", function(event) {
+                      if (event.target == modal) {
+                        modal.classList.add("hidden");
+                        modalContent.src = "";
+                      }
                     });
                   })
                   .catch((error) => console.error("Error:", error));

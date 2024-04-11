@@ -1,23 +1,14 @@
 {% extends "base.html" %}
-
 {% block title %}Result Details{% endblock %}
-
 {% block content %}
-
 <div class="w-3/4 mx-auto">
-
   <label class="block text-gray-700 text-2xl xl:text-4xl font-bold text-center pt-2"
          style="background-clip: text; -webkit-background-clip: text; color: transparent;
          background-image: linear-gradient(to right, #2563eb, #2dd4bf);"> Results Details </label>
-
   <p class="text-center m2-4">Prediction Date: {{ prediction_date.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-
   <img src="{{ url_for('static', path=result.image) }}" alt="Uploaded Image" class="my-2 mx-auto max-w-full shadow-md rounded-lg" style="height: 25vh;">
-
   <div class="bg-gray-800 shadow-md rounded-lg py-2">
-
     <table class="text-left w-full border-collapse">
-
       <thead class="bg-gray-800">
         <tr>
           <th class="py-0 px-4 font-bold uppercase text-center text-sm text-white border-b pb-2">Prediction</th>
@@ -25,7 +16,6 @@
           <th class="py-0 px-4 font-bold uppercase text-center text-sm text-white border-b pb-2">Actions</th>
         </tr>
       </thead>
-
       <tbody class="bg-white text-center">
         {% set sorted_predictions = predictions|sort(attribute='confidence_score', reverse=true) %}
         {% for prediction in sorted_predictions %}
@@ -42,10 +32,8 @@
           {% endif %}
         {% endfor %}
       </tbody>
-
     </table>
   </div>
-
   <div class="flex justify-center mt-2">
     <div class="flex space-x-4">
       <a href="/results/#content" class="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded ml-2">Back</a>

@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block title %}Past Results{% endblock %}
 {% block content %}
-<div class="w-3/4 mx-auto">
+<div class="w-11/12 mx-auto">
   <label class="block text-gray-700 text-2xl xl:text-4xl font-bold text-center pb-2 pt-2" 
-  style="background-clip: text; -webkit-background-clip: text; color: transparent;
-  background-image: linear-gradient(to right, #2563eb, #2dd4bf);"> Past Results </label>
+         style="background-clip: text; -webkit-background-clip: text; color: transparent;
+         background-image: linear-gradient(to right, #2563eb, #2dd4bf);"> Past Results </label>
   <div class="bg-gray-800 shadow-md rounded-lg py-2">
     <table class="text-left w-full border-collapse">
       <thead class="bg-gray-800">
@@ -18,13 +18,13 @@
       <tbody class="bg-white text-center">
         {% set sorted_results = results|sort(attribute='date_added', reverse=true) %}
         {% for result in sorted_results %}
-        <tr class="hover:bg-gray-50">
+        <tr class="hover:bg-gray-50 text-sm">
           <td class="py-0 px-4 border-b border-gray-200 justify-between">{{ result.date_added.strftime('%Y-%m-%d %H:%M:%S') }}</td>
           <td class="py-0 px-4 border-b border-gray-200 justify-between">{{ result.name }}</td>
           <td class="py-0 px-4 border-b border-gray-200 justify-between">{{ (result.confidence_score * 100)|float|round(1) }}%</td>
           <td class="py-0 px-4 border-b border-gray-200 justify-between">
-            <a href="/result/{{ result.id }}?prediction_date={{ result.date_added }}" class="text-white font-bold py-1 px-3 rounded text-xs mx-2 my-2 bg-green-500 hover:bg-green-700">View Result</a>
-            <button class="text-white font-bold py-1 px-3 rounded text-xs mx-2 my-2 bg-red-500 hover:bg-red-700 deleteResultBtn" data-result-id="{{ result.id }}">Delete Result</button>
+            <a href="/result/{{ result.id }}?prediction_date={{ result.date_added }}" class="text-white font-bold py-1 px-3 rounded text-xs mx-1 my-1 bg-green-500 hover:bg-green-700">View Result</a>
+            <button class="text-white font-bold py-1 px-3 rounded text-xs mx-1 my-1 bg-red-500 hover:bg-red-700 deleteResultBtn" data-result-id="{{ result.id }}">Delete Result</button>
           </td>        
         </tr>
         {% endfor %}
