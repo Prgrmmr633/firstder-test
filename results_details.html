@@ -20,7 +20,7 @@
         {% set sorted_predictions = predictions|sort(attribute='confidence_score', reverse=true) %}
         {% for prediction in sorted_predictions %}
           {% if prediction.date_added == prediction_date %}
-            <tr class="hover:bg-gray-50">
+            <tr class="hover:bg-gray-50 text-sm">
               <td class="py-0 px-4 border-b border-gray-200 justify-between text-sm">{{ prediction.name }}</td>
               <td class="py-0 px-4 border-b border-gray-200 justify-between text-sm">{{ (prediction.confidence_score * 100)|float|round(1) }}%</td>
               <td class="flex justify-center lg:block py-1 px-4 border-b border-gray-200">
@@ -42,7 +42,6 @@
       </a>
     </div>
   </div>
-
 </div>
 
 <!-- Modal -->
