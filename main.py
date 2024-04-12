@@ -13,6 +13,7 @@ from models import Prediction, UserInput
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import func
 from datetime import datetime
+from decouple import config
 import time
 import math
 
@@ -20,7 +21,7 @@ templates = Jinja2Templates(directory=".")
 app = FastAPI()
 
 # Define multiple API keys
-API_KEYS = ["5675fd21-7929-2597-6c8e-69e220ede9a2", "03e9fc01-f3a7-00a9-1d9a-191ac262ea91", "other_api_key_2"]
+API_KEYS = [config("API_KEY1"), config("API_KEY2"), config("API_KEY3")]
 current_api_key_index = 0
 
 def get_current_api_key():
@@ -80,7 +81,7 @@ async def process(
         api_key = get_current_api_key()  # Get the current API key
         print(f"Using API key: {api_key}")  # Debug line
         response = requests.post(
-            "https://autoderm.ai/v1/query?model=autoderm_v2_2&language=en",
+            config("API_URL"),
             headers={"Api-Key": api_key},
             files={"file": image_contents},
         )
@@ -90,7 +91,7 @@ async def process(
             api_key = get_current_api_key()  # Get the new current API key
             print(f"Using new API key: {api_key}")  # Debug line
             response = requests.post(
-                "https://autoderm.ai/v1/query?model=autoderm_v2_2&language=en",
+                config("API_URL"),
                 headers={"Api-Key": api_key},
                 files={"file": image_contents},
             )
