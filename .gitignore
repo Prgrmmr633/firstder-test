@@ -10,7 +10,6 @@ results.html.j2
 stuff2.html
 tmp.jpg
 sample_response.json
-.env
 __pycache__
 *.pyc
 *.pyo
