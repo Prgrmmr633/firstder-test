@@ -13,3 +13,4 @@ sample_response.json
 __pycache__
 *.pyc
 *.pyo
+.env
